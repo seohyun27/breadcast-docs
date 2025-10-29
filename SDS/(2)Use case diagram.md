@@ -18,6 +18,7 @@
 ## Use case description
 
 ### Use case #1: 회원 가입하기
+<<<<<<< HEAD
 #### GENERAL CHARACTERISTICS
 **Summery** 사용자가 시스템에 회원 정보를 등록하여 시스템의 각종 기능을 추가로 이용할 자격을 얻는 기능
 **Scope** BreadCast: 회원 정보
@@ -1092,7 +1093,7 @@
 **Frequency** 1–2회 / 1명, 1주
 **Concurrency** 10개 요청
 **Due Date** 2025.10.20.
-***
+
 ### Use case #29: 빵지순례 리뷰 삭제하기
 #### GENERAL CHARACTERISTICS
 **Summery** 사용자가 기존에 작성한 빵지순례 리뷰를 삭제하는 기능
