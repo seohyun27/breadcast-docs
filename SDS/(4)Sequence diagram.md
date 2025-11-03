@@ -19,7 +19,7 @@
 
 
 ### 7) 가게 정보 보기
-위의 그림[4-7]은 사용자가 원하는 가게의 자세한 정보를 볼 수 있게 해주는 Use Case를 시퀀스 다이어그램으로 나타낸 것이다. 먼저 사용자가 시스템에 GET /api/bakeries/{bakeryId}라는 API를 보낸다. BakeryController는 이 요청을 받아서 bakeryId는 경로 변수(@PathVariable)로, 사용자 정보는 @AuthenticationPrincipal UserDetailsImpl userDetails를 통해 획득한다. 확보한 bakeryId와 사용자 ID(memId)를 가지고 getBakeryDetail() 메소드를 실행하여 BakeryService를 호출한다. BakeryService는 getBakeryDetail(Long bakeryId, Long memId) 메소드를 실행한다. 이 메소드는 bakeryRepository에 있는 findById(bakeryId)를 호출해서 사용자가 원하는 가게의 데이터를 데이터베이스에서 찾아낸다. 만약 해당 가게가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다. 데이터를 찾아낸 뒤, BakeryService는 조회한 Bakery 엔티티를 BakeryDetailResponse DTO로 변환시킨다. 그런 뒤 BakeryService가 완성된 BakeryDetailResponse를 BakeryController에게 전달한다. 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 정보 조회가 완료된다.
+위의 그림[4-7]은 사용자가 원하는 가게의 자세한 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 먼저 사용자가 시스템에 GET /api/bakeries/{bakeryId}라는 API를 보낸다. BakeryController는 이 요청을 받아서 bakeryId는 경로 변수(@PathVariable)로, 사용자 정보는 @AuthenticationPrincipal UserDetailsImpl userDetails를 통해 획득한다. 확보한 bakeryId와 사용자 ID(memId)를 가지고 getBakeryDetail() 메소드를 실행하여 BakeryService를 호출한다. BakeryService는 getBakeryDetail(Long bakeryId, Long memId) 메소드를 실행한다. 이 메소드는 bakeryRepository에 있는 findById(bakeryId)를 호출해서 사용자가 원하는 가게의 데이터를 데이터베이스에서 찾아낸다. 만약 해당 가게가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다. 데이터를 찾아낸 뒤, BakeryService는 조회한 Bakery 엔티티를 BakeryDetailResponse DTO로 변환시킨다. 그런 뒤 BakeryService가 완성된 BakeryDetailResponse를 BakeryController에게 전달한다. 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 정보 조회가 완료된다.
 
 ### 8) 가게 관심 추가하기(스크랩하기)
 
