@@ -155,6 +155,7 @@ Spring Security의 UserDetailsService를 구현하여, AuthenticationManager를 
 ---
 
 
+<br>
 
 
 ## 2) Bakery Class diagram
@@ -312,6 +313,7 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ---
 
 
+<br>
 
 
 ## 3) Course Class diagram
@@ -464,6 +466,7 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 ---
 
 
+<br>
 
 
 ## 4) Menu Class diagram
@@ -580,6 +583,7 @@ Menu 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 인�
 ---
 
 
+<br>
 
 
 ## 5) Favorite Class diagram
@@ -699,7 +703,7 @@ FavoriteCourse 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지�
 ---
 
 
-
+<br>
 
 
 ## 6) Review Class diagram
@@ -791,7 +795,7 @@ Markdown
 
 ---
 
-# MenuReviewRepository
+### MenuReviewRepository
 MenuReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 인터페이스
 
 #### 1. Attributes
@@ -857,8 +861,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 ---
 
-
-
+<br>
+<br>
 
 ## 3.2. DTO 
 - 컨트롤러 클래스들에서 사용한 DTO를 설명하는 파트이다. 
@@ -922,6 +926,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ---
 
 
+<br>
 
 
 ## 2) bakery
@@ -1014,6 +1019,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ---
 
 
+<br>
 
 
 ## 3) report
@@ -1048,6 +1054,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ---
 
 
+<br>
 
 
 ## 4) menu
@@ -1133,6 +1140,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ---
 
 
+<br>
 
 
 ## 5) course
@@ -1287,6 +1295,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ---
 
 
+<br>
 
 
 ## 6) myPage
@@ -1396,7 +1405,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 
 
-
+<br>
+<br>
 
 
 
