@@ -1458,3 +1458,107 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 
 ## 3.3. API
+
+해당 파트에서는 각 컨트롤러에서 사용하는 api를 정의한다.
+
+### 1. AuthController
+
+인증 API <br>
+로그인과 로그아웃 시 서버의 상태를 변경하여야 하므로 POST 메소드를 사용한다. 또한 로그인 시 사용자의 아이디와 비밀번호를를 body에 담아 보내야 하므로 POST 메소드를 사용한다.
+
+| 기능 | HTTP Method | API 경로         |
+| :--- | :--- |:---------------|
+| 회원가입하기 | `POST` | `/auth/signup` |
+| 로그인하기 | `POST` | `/auth/login`  |
+| 로그아웃하기 | `POST` | `/auth/logout` |
+
+---
+
+### 2. MemberController
+
+사용자 정보 및 마이페이지 API
+
+| 기능                | HTTP Method | API 경로                                    |
+|:------------------| :--- |:------------------------------------------|
+| 내 프로필 조회          | `GET` | `/api/members/me`                         |
+| 프로필 수정            | `PATCH` | `/api/members/me`                         |
+| 회원 탈퇴하기           | `DELETE` | `/api/members/me`                         |
+| 내가 작성한 루트 보기      | `GET` | `/api/members/me/courses`                 |
+| 내가 작성한 빵집 리뷰 보기   | `GET` | `/api/members/me/reviews?category=BAKERY` |
+| 내가 작성한 메뉴 리뷰 보기   | `GET` | `/api/members/me/reviews?category=MENU`   |
+| 내가 작성한 빵지순례 리뷰 보기 | `GET` | `/api/members/me/reviews?category=COURSE` |
+| 관심 목록 보기          | `GET` | `/api/members/me/favorites`               |
+
+---
+
+### 3. BakeryController 
+
+빵집 및 빵집 리뷰 API
+
+| 기능         | HTTP Method | API 경로 | 추가 정보                                        |
+|:-----------| :--- | :--- |:---------------------------------------------|
+| 가게 검색/정렬하기 | `GET` | `/api/bakeries` | `?name=` 또는 `?sort=` 같은 쿼리 스트링으로 검색 및 정렬을 지원 |
+| 가게 정보 보기   | `GET` | `/api/bakeries/{bakeryId}` |                                         |
+| 가게 리뷰 쓰기   | `POST` | `/api/bakeries/{bakeryId}/reviews` |                      |
+| 가게 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` |                           |
+| 가게 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` |                           |
+
+---
+
+### 4. MenuController 
+
+메뉴 및 메뉴 리뷰 API
+
+| 기능 | HTTP Method | API 경로 | 
+| :--- | :--- | :--- | 
+| 가게 메뉴 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/menus` |
+| 메뉴 세부 정보 보기 | `GET` | `/api/bakeries/{bakeryId}/menus/{menuId}` | 
+| 메뉴 리뷰 쓰기 | `POST` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews` | 
+| 메뉴 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}` | 
+| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}` | 
+
+---
+
+### 5. ReportController 
+
+빵집 제보 API
+
+| 기능 | HTTP Method | API 경로                    | 
+| :--- | :--- |:--------------------------|
+| 제보 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/reports` |
+| 제보하기 | `POST` | `/api/bakeries/{bakeryId}/reports`            |
+| 제보 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reports/{reportId}` |
+| 제보 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reports/{reportId}` |
+
+---
+
+### 6. CourseController 
+
+빵지순례글 및 빵지순례 리뷰 API
+
+| 기능 | HTTP Method | API 경로 | 추가 정보                                          |
+| :--- | :--- | :--- |:-----------------------------------------------|
+| 루트 검색/목록 보기 | `GET` | `/api/courses` | `?keyword=` 또는 `?sort=popular` 등으로 검색 및 정렬을 지원 |
+| 루트 세부 글 보기 | `GET` | `/api/courses/{courseId}` |                                                |
+| 루트 작성하기 | `POST` | `/api/courses` |                                                |
+| 루트 수정하기 | `PATCH` | `/api/courses/{courseId}` |                                                |
+| 루트 삭제하기 | `DELETE` | `/api/courses/{courseId}` |                                                |
+| 루트 리뷰 쓰기 | `POST` | `/api/courses/{courseId}/reviews` |                                                |
+| 루트 리뷰 수정하기 | `PATCH` | `/api/courses/{courseId}/reviews/{reviewId}` |                                                |
+| 루트 리뷰 삭제하기 | `DELETE` | `/api/courses/{courseId}/reviews/{reviewId}` |                                                |
+
+---
+
+### 7. FavoriteController
+
+즐겨찾기(관심) 추가/삭제 API
+
+| 기능 | HTTP Method | API 경로 |
+| :--- | :--- | :--- |
+| 관심 가게 추가하기 | `POST` | `/api/favorites/bakeries/{bakeryId}` | 
+| 관심 가게 삭제하기 | `DELETE` | `/api/favorites/bakeries/{bakeryId}` | 
+| 관심 루트 추가하기 | `POST` | `/api/favorites/courses/{courseId}` | 
+| 관심 루트 삭제하기 | `DELETE` | `/api/favorites/courses/{courseId}` | 
+
+---
+
