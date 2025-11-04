@@ -64,7 +64,7 @@
 위의 그림[4-21]은 사용자가 제보글을 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 먼저 사용자가 삭제할 reportId를 경로 변수에 담아 DELETEapi/bakeries/{bakeryId}/reports/{reportId} 엔드포인트로 요청을 보낸다. 이 요청을 받은 ReportController는 @PathVariable에서 reportId를 얻어내고, @AuthenticationPrincipal UserDetailsImpl을 사용하여 현재 로그인한 사용자의 memId를 획득한다. 확보한 reportId와 memId를 가지고 deleteBakeryReport() 메소드를 실행하여 ReportService를 호출한다. ReportService는 deleteBakeryReport(Long bakeryReportId, Long memId) 메소드를 실행한다. 이 메소드는 먼저 bakeryReportRepository.findById를 호출해서 삭제할 제보 엔티티가 데이터베이스에 존재하는지 확인한다. 만약 해당 제보글이 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다. 제보 엔티티를 찾은 뒤, ReportService는 삭제 권한을 검증한다. 권한이 일치하지 않으면 예외를 발생시킨다. 권한 확인이 끝나면 bakeryReportRepository.deleteById를 호출하여 데이터베이스에서 해당 제보를 삭제한다. 삭제 작업이 성공적으로 완료된 후, ReportService는 void를 반환하며 ReportController에게 성공을 알린다. 이렇게 전달받은 성공 응답을 ReportController가 ResponseEntity 상태로 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 삭제가 완료된다.
 
 ### 22) 인기 빵지순례 보기
-
+위의 그림[4-22]은 사용자가 인기 있는 빵지순례 글 목록을 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 먼저 사용자가 GET/api/courses로 요청을 보낸다. 이 요청을 받은 CourseController는 getPopularCourses() 메소드를 실행하며 CourseService를 호출한다. CourseService는 getPopularCourses() 메소드를 실행한다. 이 메소드는 먼저 courseRepository.findAll()을 호출하여 모든 Course 엔티티를 데이터베이스에서 가져온다. 모든 Course 엔티티를 가져온 후, 코스 리스트를 순회하며 각 코스에 대해 favoriteCourseRepository.countByCourseId(course.getId())를 호출하여 해당 코스의 좋아요 수를 계산한다. 좋아요 수를 계산해낸 뒤, CourseService는 계산된 좋아요 수를 기준으로 코스 리스트를 내림차순으로 정렬한다. 최종 Course 엔티티 리스트를 GetSimpleCoursesResponse DTO 리스트로 변환시킨다. 그러고 나서 CourseService가 완성된 GetSimpleCoursesResponse 리스트를 CourseController에게 전달한다. 이렇게 전달받은 정보를 CourseController가 최종적으로 사용자에게 넘겨줌으로써 인기 빵지순례 글 목록 조회가 완료된다.
 
 ### 23) 빵지순례 검색하기
 
