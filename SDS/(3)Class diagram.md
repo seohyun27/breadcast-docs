@@ -435,8 +435,8 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 #### 2. Operations
 | Name | Argument | Returns | Description                             |
 | :--- | :--- | :--- |:----------------------------------------|
-| createCourseParts | Long courseId, List<CoursePart> courseParts | List<CoursePart> | 빵집 유효성 검사 후 CoursePart 목록을 일괄 생성(저장)    |
-| updateCourseParts | Long courseId, List<CoursePart> courseParts | List<CoursePart> | 특정 코스의 기존 CoursePart를 모두 삭제하고 새 목록으로 교체 |
+| createCourseParts | Long courseId, List<CoursePartRequest> courseParts | List<CoursePartResponse> | 빵집 유효성 검사 후 CoursePart 목록을 일괄 생성(저장)    |
+| updateCourseParts | Long courseId, List<CoursePartRequest> courseParts | List<CoursePartResponse> | 특정 코스의 기존 CoursePart를 모두 삭제하고 새 목록으로 교체 |
 
 ---
 
@@ -448,7 +448,6 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 | :--- | :--- | :--- | :--- |
 | reviewService | ReviewService | private | 리뷰 관련 비즈니스 로직을 처리하는 서비스 |
 | courseService | CourseService | private | 코스 관련 비즈니스 로직을 처리하는 서비스 |
-| coursePartService | CoursePartService | private | 코스 파트 관련 비즈니스 로직을 처리하는 서비스 |
 
 #### 2. Operations
 | Name | Argument | Returns | Description |
