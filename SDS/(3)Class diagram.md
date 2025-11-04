@@ -10,8 +10,9 @@
 - 계층간 데이터 전송을 위한 DTO와 프론트와의 소통을 위한 API의 경우 `3.1. Class diagram` 아래 `3.2. DTO`와 `3.3. API`에서 따로 서술하였다.
 
 
-## 1) Member Class diagram
-(여기에 클래스 다이어그램 그림)
+## 1) Member Class
+![member_class_diagram.png](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/class/1-member.png?raw=true)
+
 (해당 클래스 다이어그램에 대한 설명) 보안 관련은 auth로 빼고 본인 관련은 전부 Member 도메인을 사용함. 회원가입 로그인부터 시작해 본인의 글 모아보기 등의 마이페이지 기능들도 모두 여기에서 처리
 
 ---
@@ -159,7 +160,8 @@ Spring Security의 UserDetailsService를 구현하여, AuthenticationManager를 
 
 
 ## 2) Bakery Class diagram
-(여기에 클래스 다이어그램 그림)
+![bakery_class_diagram.png](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/class/2-bakery.png?raw=true)
+
 (해당 클래스 다이어그램에 대한 설명) 빵집과 빵집의 제보에 대한 것들을 처리하기 위한 클래스들.
 
 ---
@@ -316,8 +318,127 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 <br>
 
 
-## 3) Course Class diagram
-(여기에 클래스 다이어그램 그림)
+## 3) Menu Class diagram
+![menu_class_diagram.png](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/class/3-menu.png?raw=true)
+
+(해당 클래스 다이어그램에 대한 설명)
+
+---
+
+### Menu
+빵집에서 판매하는 개별 메뉴(빵)의 이름, 가격, 정보, 사진 등을 저장하는 엔티티 클래스
+
+#### 1. Attributes
+| Name | Type | Visibility | Description |
+| :--- | :--- | :--- | :--- |
+| id | long | private | 메뉴를 구분하기 위한 고유 ID (PK) |
+| name | String | private | 메뉴 이름 |
+| price | int | private | 메뉴 가격 |
+| inform | String | private | 메뉴 설명 |
+| photo | String | private | 메뉴 사진 |
+| bakery | Bakery | private | 이 메뉴가 속한 빵집 (FK) |
+
+#### 2. Operations
+| Name | Argument | Returns | Description |
+| :--- | :--- | :--- | :--- |
+| createMenu | String name, int price, String inform, String photo, Bakery bakery | Menu | 새로운 Menu 객체를 생성하는 정적(static) 메소드 |
+
+---
+
+### Bread
+빵의 이름과 카테고리 정보를 저장하는 엔티티 클래스
+
+#### 1. Attributes
+| Name | Type | Visibility | Description |
+| :--- | :--- | :--- | :--- |
+| id | long | private | 빵을 구분하기 위한 고유 ID (PK) |
+| name | String | private | 빵 이름 |
+| category | String | private | 빵 카테고리 |
+
+#### 2. Operations
+| Name | Argument | Returns | Description |
+| :--- | :--- | :--- | :--- |
+| createBread | String name, String category | Bread | 새로운 Bread 객체를 생성하는 정적(static) 메소드 |
+
+---
+
+### Classfy
+Menu 엔티티와 Bread 엔티티를 연결(매핑)하는 엔티티 클래스
+
+#### 1. Attributes
+| Name | Type | Visibility | Description |
+| :--- | :--- | :--- | :--- |
+| id | long | private | 'Classfy'를 구분하기 위한 고유 ID (PK) |
+| menu | Menu | private | 연결된 메뉴 (FK) |
+| bread | Bread | private | 연결된 빵 (FK) |
+
+#### 2. Operations
+| Name | Argument | Returns | Description                                       |
+| :--- | :--- | :--- |:--------------------------------------------------|
+| createClassfy | Menu menu, Bread bread | Classfy | Menu와 Bread를 받아 새 Classfy 객체를 생성하는 정적(static) 메소드 |
+
+---
+
+### MenuRepository
+Menu 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 인터페이스
+
+#### 1. Attributes
+| Name | Type | Visibility | Description |
+| :--- | :--- | :--- | :--- |
+|  | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
+
+#### 2. Operations
+| Name | Argument | Returns | Description                          |
+| :--- | :--- | :--- |:-------------------------------------|
+| findByBakeryId | Long bakeryId | List<Menu> | 특정 bakeryId에 해당하는 모든 Menu 엔티티 목록을 조회 |
+
+---
+
+### MenuService
+메뉴 목록 조회, 메뉴별 상세 조회 및 평균 별점 계산 등 메뉴 관련 비즈니스 로직을 처리하는 서비스 클래스
+
+#### 1. Attributes
+| Name | Type | Visibility | Description |
+| :--- | :--- | :--- | :--- |
+| menuRepository | MenuRepository | private | 메뉴 엔티티의 DB 작업을 위한 리포지토리 |
+| menuReviewRepository | MenuReviewRepository | private | 메뉴 리뷰 엔티티의 DB 작업을 위한 리포지토리 |
+
+#### 2. Operations
+| Name | Argument | Returns | Description |
+| :--- | :--- | :--- | :--- |
+| getMenus | Long bakeryId | List<GetMenusResponse> | 특정 빵집의 모든 메뉴 목록을 (평균 별점, 리뷰 수 포함) 조회 |
+| getMenuDetail | Long menuId, Long memId | GetMenuDetailResponse | 특정 메뉴의 상세 정보(리뷰 목록, 평균 별점 등)를 조회 |
+| getAverageRating | Long menuId | double | (private) 특정 메뉴의 평균 별점을 계산하는 내부 메소드 |
+
+---
+
+### MenuController
+클라이언트의 메뉴 조회 및 메뉴 리뷰 관련 HTTP 요청을 처리하는 컨트롤러 클래스.
+
+#### 1. Attributes
+| Name | Type | Visibility | Description |
+| :--- | :--- | :--- | :--- |
+| menuService | MenuService | private | 메뉴 관련 비즈니스 로직을 처리하는 서비스 |
+| reviewService | ReviewService | private | 리뷰 관련 비즈니스 로직을 처리하는 서비스 |
+
+#### 2. Operations
+| Name | Argument | Returns | Description |
+| :--- | :--- | :--- | :--- |
+| getMenus | Long bakeryId | List<GetMenusResponse> | 특정 빵집의 메뉴 목록 조회 요청을 처리 |
+| getMenuDetail | Long menuId, UserDetailsImpl userDetails | GetMenuDetailResponse | 특정 메뉴의 상세 정보 조회 요청을 처리 |
+| addMenuReview | Long menuId, UserDetailsImpl userDetails, AddMenuReviewRequest request | ResponseEntity<MenuReviewResponse> | 특정 메뉴에 리뷰를 추가하는 요청을 처리 |
+| updateMenuReview | Long menuReviewId, UserDetailsImpl userDetails, UpdateMenuReviewRequest request | ResponseEntity<MenuReviewResponse> | 특정 메뉴 리뷰를 수정하는 요청을 처리 |
+| deleteMenuReview | Long menuReviewId, UserDetailsImpl userDetails | ResponseEntity<Void> | 특정 메뉴 리뷰를 삭제하는 요청을 처리 |
+
+---
+
+
+<br>
+
+
+## 4) Course Class diagram
+![course_class_diagram.png](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/class/4-course.png?raw=true)
+
 (해당 클래스 다이어그램에 대한 설명) 빵지순례가 어떤 식으로 코스와 코스 파트로 나누어져 저장되는지
 
 ---
@@ -468,125 +589,9 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 <br>
 
 
-## 4) Menu Class diagram
-(여기에 클래스 다이어그램 그림)
-(해당 클래스 다이어그램에 대한 설명)
-
----
-
-### Menu
-빵집에서 판매하는 개별 메뉴(빵)의 이름, 가격, 정보, 사진 등을 저장하는 엔티티 클래스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-| id | long | private | 메뉴를 구분하기 위한 고유 ID (PK) |
-| name | String | private | 메뉴 이름 |
-| price | int | private | 메뉴 가격 |
-| inform | String | private | 메뉴 설명 |
-| photo | String | private | 메뉴 사진 |
-| bakery | Bakery | private | 이 메뉴가 속한 빵집 (FK) |
-
-#### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| createMenu | String name, int price, String inform, String photo, Bakery bakery | Menu | 새로운 Menu 객체를 생성하는 정적(static) 메소드 |
-
----
-
-### Bread
-빵의 이름과 카테고리 정보를 저장하는 엔티티 클래스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-| id | long | private | 빵을 구분하기 위한 고유 ID (PK) |
-| name | String | private | 빵 이름 |
-| category | String | private | 빵 카테고리 |
-
-#### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| createBread | String name, String category | Bread | 새로운 Bread 객체를 생성하는 정적(static) 메소드 |
-
----
-
-### Classfy
-Menu 엔티티와 Bread 엔티티를 연결(매핑)하는 엔티티 클래스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-| id | long | private | 'Classfy'를 구분하기 위한 고유 ID (PK) |
-| menu | Menu | private | 연결된 메뉴 (FK) |
-| bread | Bread | private | 연결된 빵 (FK) |
-
-#### 2. Operations
-| Name | Argument | Returns | Description                                       |
-| :--- | :--- | :--- |:--------------------------------------------------|
-| createClassfy | Menu menu, Bread bread | Classfy | Menu와 Bread를 받아 새 Classfy 객체를 생성하는 정적(static) 메소드 |
-
----
-
-### MenuRepository
-Menu 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 인터페이스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-|  | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
-
-#### 2. Operations
-| Name | Argument | Returns | Description                          |
-| :--- | :--- | :--- |:-------------------------------------|
-| findByBakeryId | Long bakeryId | List<Menu> | 특정 bakeryId에 해당하는 모든 Menu 엔티티 목록을 조회 |
-
----
-
-### MenuService
-메뉴 목록 조회, 메뉴별 상세 조회 및 평균 별점 계산 등 메뉴 관련 비즈니스 로직을 처리하는 서비스 클래스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-| menuRepository | MenuRepository | private | 메뉴 엔티티의 DB 작업을 위한 리포지토리 |
-| menuReviewRepository | MenuReviewRepository | private | 메뉴 리뷰 엔티티의 DB 작업을 위한 리포지토리 |
-
-#### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| getMenus | Long bakeryId | List<GetMenusResponse> | 특정 빵집의 모든 메뉴 목록을 (평균 별점, 리뷰 수 포함) 조회 |
-| getMenuDetail | Long menuId, Long memId | GetMenuDetailResponse | 특정 메뉴의 상세 정보(리뷰 목록, 평균 별점 등)를 조회 |
-| getAverageRating | Long menuId | double | (private) 특정 메뉴의 평균 별점을 계산하는 내부 메소드 |
-
----
-
-### MenuController
-클라이언트의 메뉴 조회 및 메뉴 리뷰 관련 HTTP 요청을 처리하는 컨트롤러 클래스.
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-| menuService | MenuService | private | 메뉴 관련 비즈니스 로직을 처리하는 서비스 |
-| reviewService | ReviewService | private | 리뷰 관련 비즈니스 로직을 처리하는 서비스 |
-
-#### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| getMenus | Long bakeryId | List<GetMenusResponse> | 특정 빵집의 메뉴 목록 조회 요청을 처리 |
-| getMenuDetail | Long menuId, UserDetailsImpl userDetails | GetMenuDetailResponse | 특정 메뉴의 상세 정보 조회 요청을 처리 |
-| addMenuReview | Long menuId, UserDetailsImpl userDetails, AddMenuReviewRequest request | ResponseEntity<MenuReviewResponse> | 특정 메뉴에 리뷰를 추가하는 요청을 처리 |
-| updateMenuReview | Long menuReviewId, UserDetailsImpl userDetails, UpdateMenuReviewRequest request | ResponseEntity<MenuReviewResponse> | 특정 메뉴 리뷰를 수정하는 요청을 처리 |
-| deleteMenuReview | Long menuReviewId, UserDetailsImpl userDetails | ResponseEntity<Void> | 특정 메뉴 리뷰를 삭제하는 요청을 처리 |
-
----
-
-
-<br>
-
-
 ## 5) Favorite Class diagram
-(여기에 클래스 다이어그램 그림)
+![favorite_class_diagram.png](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/class/5-favorite.png?raw=true)
+
 (해당 클래스 다이어그램에 대한 설명) 사용자의 좋아요 기능을 담당하는 클래스들을 모아둠.
 
 ---
@@ -706,7 +711,8 @@ FavoriteCourse 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지�
 
 
 ## 6) Review Class diagram
-(여기에 클래스 다이어그램 그림)
+![review_class_diagram.png](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/class/6-review.png?raw=true)
+
 (해당 클래스 다이어그램에 대한 설명) 리뷰의 경우 각각 빵집 페이지, 메뉴 페이지, 빵지순례 페이지에서 사용되므로 리뷰 컨트롤러를 따로 두지 않고 베이커리 컨트롤러, 메뉴 컨트롤러, 코스 컨트롤러를 사용하였다.
 
 ---
