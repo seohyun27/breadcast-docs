@@ -13,7 +13,17 @@
 
 
 ## 5) 가게 검색하기
+![5_BakerySearchSort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-BakerySearchSort.jpg?raw=true)
 
+- 위의 그림[4-5]은 사용자가 가게 검색 및 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 먼저 사용자가 검색 키워드와 정렬 기준이 포함된 SearchBakeryRequest DTO를 본문에 실어 GET/api/bakeries ?name= 또는 ?sort=로 요청을 보낸다.
+- 이 요청을 받은 BakeryController는 @RequestBody에서 SearchBakeryRequest DTO를 얻어낸다.
+- 확보한 요청 DTO를 가지고 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
+- BakeryService는 searchBakeries(SearchBakeryRequest request) 메소드를 실행한다. 이 메소드는 먼저 request.getKeyword()로 받아온 키워드를 기반으로 가게명, 지역, 메뉴명 등에서 검색어가 포함된 Bakery 엔티티 목록을 데이터베이스에서 찾아낸다. 
+- 검색된 Bakery 엔티티 리스트를 찾아낸 뒤, BakeryService는 좋아요 순으로 리스트를 정렬한다.
+- 정렬까지 완료된 Bakery 엔티티 리스트를 SearchBakeryResponse DTO 리스트로 변환시킨다.
+- BakeryService가 완성된 SearchBakeryResponse 리스트를 BakeryController에게 전달한다.
+- 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 검색 및 정렬 조회가 완료된다.
 
 ## 6) 가게 정렬하기
 
