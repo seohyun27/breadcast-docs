@@ -766,14 +766,13 @@ Member가 Course에 대해 작성한 리뷰를 저장하는 엔티티 클래스
 | text | String | private | 코스 리뷰 내용 |
 | date | LocalDateTime | private | 코스 리뷰 생성 날짜 (@CreatedDate) |
 | member | Member | private | 리뷰를 작성한 회원 (FK) |
-| bakery | Bakery | private | (연관된) 빵집 (FK) |
 | course | Course | private | 리뷰 대상 코스 (FK) |
 
 #### 2. Operations
-| Name | Argument | Returns | Description                              |
-| :--- | :--- | :--- |:-----------------------------------------|
-| createCourseReview | String text, Member member, Bakery bakery | CourseReview | 새로운 CourseReview 객체를 생성하는 정적(static) 메소드 |
-| update | String text | void | 코스 리뷰의 내용을 수정하는 메소드                      |
+| Name | Argument                                  | Returns | Description                              |
+| :--- |:------------------------------------------| :--- |:-----------------------------------------|
+| createCourseReview | String text, Member member, Course course | CourseReview | 새로운 CourseReview 객체를 생성하는 정적(static) 메소드 |
+| update | String text                               | void | 코스 리뷰의 내용을 수정하는 메소드                      |
 
 ---
 
