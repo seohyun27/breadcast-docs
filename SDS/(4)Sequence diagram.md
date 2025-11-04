@@ -67,7 +67,7 @@
 위의 그림[4-22]은 사용자가 인기 있는 빵지순례 글 목록을 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 먼저 사용자가 GET/api/courses로 요청을 보낸다. 이 요청을 받은 CourseController는 getPopularCourses() 메소드를 실행하며 CourseService를 호출한다. CourseService는 getPopularCourses() 메소드를 실행한다. 이 메소드는 먼저 courseRepository.findAll()을 호출하여 모든 Course 엔티티를 데이터베이스에서 가져온다. 모든 Course 엔티티를 가져온 후, 코스 리스트를 순회하며 각 코스에 대해 favoriteCourseRepository.countByCourseId(course.getId())를 호출하여 해당 코스의 좋아요 수를 계산한다. 좋아요 수를 계산해낸 뒤, CourseService는 계산된 좋아요 수를 기준으로 코스 리스트를 내림차순으로 정렬한다. 최종 Course 엔티티 리스트를 GetSimpleCoursesResponse DTO 리스트로 변환시킨다. 그러고 나서 CourseService가 완성된 GetSimpleCoursesResponse 리스트를 CourseController에게 전달한다. 이렇게 전달받은 정보를 CourseController가 최종적으로 사용자에게 넘겨줌으로써 인기 빵지순례 글 목록 조회가 완료된다.
 
 ### 23) 빵지순례 검색하기
-
+위의 그림[4-23]은 사용자가 빵지순례 글을 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 먼저 사용자가 검색 키워드가 포함된 SearchCourseRequest DTO를 본문에 실어 GET/api/courses ?keyword= 또는 ?sort=popular로 요청을 보낸다. 이 요청을 받은 CourseController는 @RequestBody에서 SearchCourseRequest DTO를 얻어낸다. 확보한 DTO를 가지고 searchCourses() 메소드를 실행하여 CourseService를 호출한다. CourseService는 searchCourses() 메소드를 실행한다. 이 메소드는 courseRepository.findByTitleContainingOrKeywordContaining(title, keyword, pageable)를 호출하여 사용자가 입력한 키워드를 기반으로 제목 또는 키워드에 검색어가 포함된 Course 엔티티 목록을 데이터베이스에서 찾아낸다. 검색된 Course 엔티티 목록을 찾아낸 뒤, CourseService는 이 목록을 순회하며 각 코스에 대한 추가 정보를 계산한다. favoriteCourseRepository.countByCourseId(course.getId())를 호출하여 각 코스의 좋아요 수를 계산한다. 모든 정보가 포함되면, CourseService는 Course 엔티티 리스트를 GetSimpleCoursesResponse DTO 리스트로 변환시킨다. 그러고 나서 CourseService가 완성된 GetSimpleCoursesResponse 리스트를 CourseController에게 전달한다. 이렇게 전달받은 정보를 CourseController가 최종적으로 사용자에게 넘겨줌으로써 빵지순례 글 검색이 완료된다.
 
 ### 24) 빵지순례 상세 페이지 보기
 
