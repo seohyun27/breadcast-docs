@@ -79,7 +79,7 @@
 
 
 ### 27) 빵지순례 리뷰 쓰기
-
+위의 그림[4-27]은 사용자가 빵지순례 글에 리뷰를 달 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 먼저 사용자가 리뷰할 courseId를 경로 변수에 담고 리뷰 내용이 포함된 CourseReviewRequest DTO를 본문에 실어 POST/api/courses/{courseId}/reviews로 요청을 보낸다. 이 요청을 받은 CourseController는 @PathVariable에서 courseId를 추출하고, @AuthenticationPrincipal UserDetailsImpl을 사용하여 사용자의 정보를 획득한다. 또한, @Valid 어노테이션을 통해 CourseReviewRequest의 기본적인 유효성을 검증한다. 확보한 courseId, 사용자 정보, 그리고 request DTO를 가지고 addCourseReview() 메소드를 실행하여 ReviewService를 호출한다. ReviewService는 addCourseReview(Long courseId, Long memId, CourseReviewRequest request) 메소드를 실행한다. 이 메소드는 먼저 courseRepository.findById(courseId)를 호출하여 리뷰를 작성할 코스가 실제로 존재하는지 확인한다. 만약 코스가 존재하지 않으면 예외를 발생시켜 중단한다. 코스의 존재가 확인되면, 그 다음으로 사용자의 권한을 확인한다. 권한이 없으면 예외를 발생시킨다. 권한이 존재한다면 ReviewService는 memId, courseId, DTO의 내용을 포함하는 CourseReview 엔티티를 생성한다. 생성된 엔티티는 courseReviewRepository.save(courseReview)를 호출하여 데이터베이스에 저장된다. 저장이 완료된 후, ReviewService는 저장된 CourseReview 엔티티 정보를 CourseReviewResponse DTO로 변환시키며, 이 DTO를 CourseController에게 전달한다. 이렇게 받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵지순례글 리뷰 작성이 성공적으로 완료된다.
 
 ### 28) 빵지순례 리뷰 수정하기
 
