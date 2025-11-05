@@ -26,7 +26,13 @@
 ## 6) 가게 정렬하기
 ![6_BakerySort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/6-Bakery-Sort.jpg?raw=true)
 
-
+- 사용자가 가게 목록을 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 요청을 받은 BakeryController는 정렬 기준 정보가 들어있는 DTO를 가지고 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
+- BakeryService는 searchBakeries() 메소드를 실행한다. 
+- BakeryService는 사용자가 보낸 정렬 기준 순으로 리스트를 정렬한다.
+- 정렬까지 완료된 Bakery 엔티티 리스트를 SearchBakeryResponse DTO 리스트로 변환시킨다.
+- BakeryService가 완성된 SearchBakeryResponse 리스트를 BakeryController에게 전달한다.
+- 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 목록 정렬이 완료된다.
 
 ## 7) 가게 정보 보기
 ![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-Bakery-Detail-Show.jpg?raw=true)
