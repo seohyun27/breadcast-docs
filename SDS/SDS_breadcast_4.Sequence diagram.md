@@ -13,11 +13,10 @@
 
 
 ## 5) 가게 검색하기
-![5_BakerySearchSort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-BakerySearchSort.jpg?raw=true)
+![5_BakerySearchSort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search-Sort.jpg?raw=true)
 
 - 사용자가 가게 검색 및 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 먼저 사용자가 검색 키워드와 정렬 기준이 포함된 SearchBakeryRequest DTO를 본문에 실어 GET/api/bakeries ?name= 또는 ?sort=로 요청을 보낸다.
-- 이 요청을 받은 BakeryController는 @RequestBody에서 SearchBakeryRequest DTO를 얻어낸다.
+- BakeryController가 SearchBakeryRequest DTO를 얻어낸다.
 - 확보한 요청 DTO를 가지고 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
 - BakeryService는 searchBakeries(SearchBakeryRequest request) 메소드를 실행한다. 이 메소드는 먼저 request.getKeyword()로 받아온 키워드를 기반으로 가게명, 지역, 메뉴명 등에서 검색어가 포함된 Bakery 엔티티 목록을 데이터베이스에서 찾아낸다. 
 - 검색된 Bakery 엔티티 리스트를 찾아낸 뒤, BakeryService는 좋아요 순으로 리스트를 정렬한다.
@@ -29,7 +28,7 @@
 
 
 ## 7) 가게 정보 보기
-![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-BakeryDetailShow.jpg?raw=true)
+![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-Bakery-Detail-Show.jpg?raw=true)
 
 - 사용자가 원하는 가게의 자세한 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 시스템에 GET /api/bakeries/{bakeryId}라는 API를 보낸다.
@@ -48,7 +47,7 @@
 
 
 ## 10) 가게 리뷰 보기
-![10_BakeryReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/10-BakeryReviewShow.jpg?raw=true)
+![10_BakeryReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/10-Bakery-Review-Show.jpg?raw=true)
 
 - 사용자가 가게 리뷰들을 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 조회할 bakeryId를 경로 변수에 경로 변수에 담아 GET/api/bakeries/{bakeryId}로 요청을 보낸다.
@@ -61,7 +60,7 @@
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 리뷰 목록 조회가 완료된다.
 
 ## 11) 가게 리뷰 쓰기
-![11_BakeryReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/11-BakeryReviewAdd.jpg?raw=true)
+![11_BakeryReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/11-Bakery-Review-Add.jpg?raw=true)
 
 - 사용자가 가게 리뷰를 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 리뷰할 bakeryId를 경로 변수에 담고 리뷰 내용이 포함된 BakeryReviewRequest DTO를 본문에 실어 POST/api/bakeries/{bakeryId}/reviews로 요청을 보낸다.
@@ -75,7 +74,7 @@
 - 이렇게 받은 최종 응답을 BakeryController가 사용자에게 넘겨줌으로써 가게 리뷰 작성이 성공적으로 완료된다.
 
 ## 12) 가게 리뷰 수정하기
-![12_BakeryReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/12-BakeryReviewUpdate.jpg?raw=true)
+![12_BakeryReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/12-Bakery-Review-Update.jpg?raw=true)
 
 - 사용자가 가게 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 수정할 bakeryId와 reviewId를 경로 변수에 담고 수정된 내용이 포함된 BakeryReviewRequest DTO를 본문에 실어 PATCH/api/bakeries/{bakeryId}/reviews/{reviewId}로 요청을 보낸다.
@@ -90,7 +89,7 @@
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 리뷰 수정이 완료된다.
 
 ## 13) 가게 리뷰 삭제하기
-![13_BakeryReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/13-BakeryReviewDelete.jpg?raw=true)
+![13_BakeryReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/13-Bakery-Review-Delete.jpg?raw=true)
 
 - 사용자가 가게 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 삭제할 bakeryId와 reviewId를 경로 변수에 담고 DELETE/api/bakeries/{bakeryId}/reviews/{reviewId}로 요청을 보낸다.
@@ -105,7 +104,7 @@
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 ResponseEntity<Void>를 사용자에게 넘겨줌으로써 가게 리뷰 삭제가 완료된다.
 
 ## 14) 가게 메뉴 목록 보기
-![14_MenuListShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/14-MenuListShow.jpg?raw=true)
+![14_MenuListShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/14-Menu-List-Show.jpg?raw=true)
 
 - 사용자가 가게 메뉴 목록을 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 조회할 bakeryId를 경로 변수에 담아 GET/api/bakeries/{bakeryId}/menus 엔드포인트로 요청을 보낸다.
@@ -120,7 +119,7 @@
 - 이렇게 전달받은 정보를 MenuController가 최종적으로 사용자에게 넘겨줌으로써 빵집 메뉴 목록 조회가 완료된다.
 
 ## 15) 메뉴 리뷰 보기
-![15_MenuDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/15-MenuDetailShow.jpg?raw=true)
+![15_MenuDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/15-Menu-Detail-Show.jpg?raw=true)
 
 - 사용자가 가게 메뉴 상세 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 사용자가 조회할 menuId를 경로 변수에 담아 GET/api/bakeries/{bakeryId}/menus/{menuId}로 요청을 보낸다.
@@ -136,7 +135,7 @@
 - 이렇게 전달받은 정보를 MenuController가 최종적으로 사용자에게 넘겨줌으로써 메뉴 상세 정보 조회가 완료된다.
 
 ## 16) 메뉴 리뷰 쓰기
-![16_MenuReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/16-MenuReviewAdd.jpg?raw=true)
+![16_MenuReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/16-Menu-Review-Add.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 리뷰할 menuId를 경로 변수에 담고 리뷰 내용이 포함된 AddMenuReviewRequest DTO를 본문에 실어 POST/api/bakeries/{bakeryId}/menus/{menuId}/reviews로 요청을 보낸다.
@@ -155,7 +154,7 @@
 - 이렇게 받은 최종 응답을 MenuController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 메뉴 리뷰 작성이 성공적으로 완료된다.
 
 ## 17) 메뉴 리뷰 수정하기
-![17_MenuReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/17-MenuReviewUpdate.jpg?raw=true)
+![17_MenuReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/17-Menu-Review-Update.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 수정할 reviewId를 경로 변수에 담고 수정된 내용이 포함된 UpdateMenuReviewRequest DTO를 본문에 실어 PATCH/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}로 요청을 보낸다.
@@ -174,7 +173,7 @@
 - 이렇게 전달받은 정보를 MenuController가 최종적으로 사용자에게 넘겨줌으로써 메뉴 리뷰 수정이 완료된다.
 
 ## 18) 메뉴 리뷰 삭제하기
-![18_MenuReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/18-MenuReviewDelete.jpg?raw=true)
+![18_MenuReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/18-Menu-Review-Delete.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 삭제할 reviewId를 경로 변수에 담아 DELETE/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}로 요청을 보낸다.
@@ -190,7 +189,7 @@
 - 이렇게 전달받은 성공 응답을 MenuController가 ResponseEntity<Void>로 최종적으로 사용자에게 넘겨줌으로써 메뉴 리뷰 삭제가 완료된다.
 
 ## 19) 제보 보기
-![19_ReportShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/19-ReportShow.jpg?raw=true)
+![19_ReportShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/19-Report-Show.jpg?raw=true)
 
 - 사용자가 제보글을 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 조회할 bakeryId를 경로 변수에 담아 GET/api/bakeries/{bakeryId}/reports로 요청을 보낸다.
@@ -204,7 +203,7 @@
 - 이렇게 전달받은 정보를 ReportController가 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 목록 조회가 완료된다.
 
 ## 20) 제보하기
-![20_ReportAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/20-ReportAdd.jpg?raw=true)
+![20_ReportAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/20-Report-Add.jpg?raw=true)
 
 - 사용자가 제보글을 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 제보할 bakeryId를 경로 변수에 담고 제보 내용이 포함된 AddReportRequest DTO를 본문에 실어 POST/api/bakeries/{bakeryId}/reports로 요청을 보낸다.
@@ -220,7 +219,7 @@
 - 이렇게 받은 최종 응답을 ReportController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵집 제보 작성이 성공적으로 완료된다.
 
 ## 21) 제보 삭제하기
-![21_ReportDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/21-ReportDelete.jpg?raw=true)
+![21_ReportDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/21-Report-Delete.jpg?raw=true)
 
 - 사용자가 제보글을 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 삭제할 reportId를 경로 변수에 담아 DELETEapi/bakeries/{bakeryId}/reports/{reportId} 엔드포인트로 요청을 보낸다.
@@ -235,7 +234,7 @@
 - 이렇게 전달받은 성공 응답을 ReportController가 ResponseEntity 상태로 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 삭제가 완료된다.
 
 ## 22) 인기 빵지순례 보기
-![22_CourseFavoriteShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/22-CourseFavoriteShow.jpg?raw=true)
+![22_CourseFavoriteShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/22-Course-Favorite-Show.jpg?raw=true)
 
 - 사용자가 인기 있는 빵지순례 글 목록을 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.-
 - 먼저 사용자가 GET/api/courses로 요청을 보낸다. 이 요청을 받은 CourseController는 getPopularCourses() 메소드를 실행하며 CourseService를 호출한다.
@@ -248,7 +247,7 @@
 - 이렇게 전달받은 정보를 CourseController가 최종적으로 사용자에게 넘겨줌으로써 인기 빵지순례 글 목록 조회가 완료된다.
 
 ## 23) 빵지순례 검색하기
-![23_CourseSearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/23-CourseSearch.jpg?raw=true)
+![23_CourseSearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/23-Course-Search.jpg?raw=true)
 
 - 사용자가 빵지순례 글을 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 검색 키워드가 포함된 SearchCourseRequest DTO를 본문에 실어 GET/api/courses ?keyword= 또는 ?sort=popular로 요청을 보낸다.
@@ -262,7 +261,7 @@
 - 이렇게 전달받은 정보를 CourseController가 최종적으로 사용자에게 넘겨줌으로써 빵지순례 글 검색이 완료된다.
 
 ## 24) 빵지순례 상세 페이지 보기
-![24_CourseDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/24-CourseDetailShow.jpg?raw=true)
+![24_CourseDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/24-Course-Detail-Show.jpg?raw=true)
 
 - 사용자가 빵지순례 글 상세 정보를 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 조회할 courseId를 경로 변수에 담아 GET/api/courses/{courseId}로 요청을 보낸다.
@@ -286,7 +285,7 @@
 
 
 ## 27) 빵지순례 리뷰 쓰기
-![27_CourseReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/27-CourseReviewAdd.jpg?raw=true)
+![27_CourseReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/27-Course-Review-Add.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 달 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 리뷰할 courseId를 경로 변수에 담고 리뷰 내용이 포함된 CourseReviewRequest DTO를 본문에 실어 POST/api/courses/{courseId}/reviews로 요청을 보낸다.
@@ -302,7 +301,7 @@
 - 이렇게 받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵지순례글 리뷰 작성이 성공적으로 완료된다.
 
 ## 28) 빵지순례 리뷰 수정하기
-![28_CourseReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/28-CourseReviewUpdate.jpg?raw=true)
+![28_CourseReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/28-Course-Review-Update.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 수정할 reviewId를 경로 변수에 담고 수정된 내용이 포함된 CourseReviewRequest DTO를 본문에 실어 PATCH/api/courses/{courseId}/reviews/{reviewId}로 요청을 보낸다.
@@ -319,7 +318,7 @@
 - 이렇게 받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 루트 글 리뷰 수정이 완료된다.
 
 ## 29) 빵지순례 리뷰 삭제하기
-![29_CourseReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/29-CourseReviewDelete.jpg?raw=true)
+![29_CourseReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/29-Course-Review-Delete.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 먼저 사용자가 삭제할 reviewId를 경로 변수에 담아 DELETE/api/courses/{courseId}/reviews/{reviewId}로 요청을 보낸다.
