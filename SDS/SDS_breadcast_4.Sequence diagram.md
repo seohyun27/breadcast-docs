@@ -300,7 +300,22 @@
 - 이렇게 전달받은 성공 응답을 CourseController가 ResponseEntity를 사용하여 사용자에게 넘겨줌으로써 루트 글 리뷰 삭제가 완료된다.
 
 ## 30) 빵지순례 만들기
+![30_CourseAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/30-Course-Add.jpg?raw=true)
 
+- 사용자가 빵지순례 글을 작성할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다. 
+- 요청을 받은 CourseController는 사용자 정보와 DTO를 가지고 createCourse() 메소드를 실행하여 CourseService를 호출한다.
+- CourseService는 createCourse() 메소드를 실행한다.
+- 이 메소드는 먼저 사용자에게 빵지순례글을 쓸 권한이 있는지 확인한다.
+- 권한이 없으면 적절한 예외로 처리한다.
+- 권한이 있다면, DTO의 정보를 사용하여 Course 엔티티를 생성한다.
+- 그리고 courseRepository.save() 메소드를 이용해 데이터베이스에 저장하고 생성된 코스를 얻어낸다.
+- CourseService는 CoursePartService의 createCourseParts() 메소드를 호출한다.
+- CoursePartService는 createCourseParts() 메소드를 실행한다.
+- 이 메소드는 반복문을 돌며 빵집이 존재하는지 검증한다.
+- 빵집이 존재한다면 CoursePart 엔티티를 생성하고 coursePartRepository.save() 메소드를 이용해 데이터베이스에 저장한다.
+- 저장이 완료되면 만들어진 CoursePart 객체들의 정보를 List<CoursePartResponse>에 담아 CourseService로 반환한다.
+- CourseService는 CoursePartService에서 반환받은 List<CoursePartResponse>와 처음에 만든 Course의 정보를 하나의 CourseResponse DTO로 묶어 CourseController로 반환한다. 
+- 이렇게 전달받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵지순례 글 작성이 성공적으로 완료된다.
 
 ## 31) 빵지순례 수정하기
 
