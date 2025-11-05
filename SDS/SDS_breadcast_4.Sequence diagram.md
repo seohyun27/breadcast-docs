@@ -318,7 +318,22 @@
 - 이렇게 전달받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵지순례 글 작성이 성공적으로 완료된다.
 
 ## 31) 빵지순례 수정하기
+![31_CourseUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/31-Course-Update.jpg?raw=true)
 
+- 사용자가 빵지순례 글을 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 요청을 받은 CourseController는 courseId와 사용자 정보, DTO를 가지고 updateCourse() 메소드를 실행하여 CourseService를 호출한다.
+- CourseService는 updateCourse() 메소드를 실행한다.
+- 이 메소드는 먼저 courseRepository.findById()를 호출하여 courseId에 해당하는 코스 엔티티를 데이터베이스에서 불러온다.
+- 코스가 존재하지 않으면 적절한 예외를 발생시킨다.
+- 코스를 불러온 뒤, CourseService는 사용자의 수정 권한을 검증한다.
+- 권한이 확인되면, 불러온 코스 엔티티의 Course.update() 메소드를 사용하여 Course 내용을 변경한다.
+- CourseService는 CoursePartService의 updateCourseParts()를 호출한다.
+- CoursePartService는 updateCourseParts() 메소드를 실행한다.
+- 이 메소드는 먼저 CoursePartRepository.deleteAllByCourseId()를 호출하여 해당 Course에 연결된 모든 기존 CoursePart를 일괄 삭제한다.
+- 삭제 후에는 CoursePartService.createCourseParts()를 호출하여 새로운 CoursePart를 일괄 저장하는 작업을 진행한다.
+- createCourseParts가 반환한 List<CoursePartResponse>를 CourseService에게 그대로 반환한다.
+- CourseService는 CoursePartService가 반환한 List<CoursePartResponse>와 바뀐 Course의 정보를 묶어 CourseResponse DTO로 CourseController에 반환한다.
+- 이렇게 전달받은 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 루트 글 수정이 완료된다.
 
 ## 32) 빵지순례 삭제하기
 
