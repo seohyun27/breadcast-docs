@@ -1,5 +1,4 @@
 # 4. Sequence diagram
-- DTO 유효성 검사는 다른 기능들과 공통 사항이기 때문에 아래의 시퀀스 설명에 따로 적지 않았습니다.
 
 ## 1) 회원 가입하기
 
@@ -14,18 +13,26 @@
 
 
 ## 5) 가게 검색하기
-![5_BakerySearchSort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search-Sort.jpg?raw=true)
+![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search.jpg?raw=true)
 
-- 사용자가 가게 검색 및 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- BakeryController가 SearchBakeryRequest DTO를 받아 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
-- BakeryService는 searchBakeries() 메소드를 실행한다. 이 메소드는 먼저 request.getKeyword()로 받아온 키워드를 기반으로 가게명, 지역, 메뉴명 등에서 검색어가 포함된 Bakery 엔티티 목록을 데이터베이스에서 찾아낸다. 
-- 검색된 Bakery 엔티티 리스트를 찾아낸 뒤, BakeryService는 좋아요 순으로 리스트를 정렬한다.
-- 정렬까지 완료된 Bakery 엔티티 리스트를 SearchBakeryResponse DTO 리스트로 변환시킨다.
+- 사용자가 가게 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- BakeryController가 DTO를 받아 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
+- BakeryService는 searchBakeries() 메소드를 실행한다.
+- 이 메소드는 먼저 받아온 키워드를 기반으로 검색어가 포함된 Bakery 엔티티들을 데이터베이스에서 찾아낸다. 
+- Bakery 엔티티 리스트를 SearchBakeryResponse DTO 리스트로 변환시킨다.
 - BakeryService가 완성된 SearchBakeryResponse 리스트를 BakeryController에게 전달한다.
-- 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 검색 및 정렬 조회가 완료된다.
+- 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 검색이 완료된다.
 
 ## 6) 가게 정렬하기
+![6_BakerySort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/6-Bakery-Sort.jpg?raw=true)
 
+- 사용자가 가게 목록을 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 요청을 받은 BakeryController는 정렬 기준 정보가 들어있는 DTO를 가지고 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
+- BakeryService는 searchBakeries() 메소드를 실행한다. 
+- BakeryService는 사용자가 보낸 정렬 기준 순으로 리스트를 정렬한다.
+- 정렬까지 완료된 Bakery 엔티티 리스트를 SearchBakeryResponse DTO 리스트로 변환시킨다.
+- BakeryService가 완성된 SearchBakeryResponse 리스트를 BakeryController에게 전달한다.
+- 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 목록 정렬이 완료된다.
 
 ## 7) 가게 정보 보기
 ![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-Bakery-Detail-Show.jpg?raw=true)
