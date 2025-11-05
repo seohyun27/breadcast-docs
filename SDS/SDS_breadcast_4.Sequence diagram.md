@@ -38,7 +38,7 @@
 ![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-Bakery-Detail-Show.jpg?raw=true)
 
 - 사용자가 원하는 가게의 자세한 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- BakeryController는 요청을 받아서 bakeryId, UserDetailsImpl를 가지고 getBakeryDetail() 메소드를 실행하여 BakeryService를 호출한다.
+- BakeryController는 요청을 받아서 bakeryId, 사용자 정보를 가지고 getBakeryDetail() 메소드를 실행하여 BakeryService를 호출한다.
 - BakeryService는 getBakeryDetail() 메소드를 실행한다.
 - 이 메소드는 bakeryRepository에 있는 findById()를 호출해서 사용자가 원하는 가게의 데이터를 데이터베이스에서 찾아낸다.
 - 만약 해당 가게가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
@@ -56,9 +56,9 @@
 ![10_BakeryReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/10-Bakery-Review-Show.jpg?raw=true)
 
 - 사용자가 가게 리뷰들을 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 BakeryController가 bakeryId, UserDetailsImpl를 가지고 getBakeryReviews() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 BakeryController가 bakeryId, 사용자 정보를 가지고 getBakeryReviews() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 getBakeryReviews() 메소드를 실행한다.
-- 이 메소드는 bakeryReviewRepository.findAll()를 호출해서 해당 bakeryId에 종속된 모든 BakeryReview 엔티티 리스트를 데이터베이스에서 찾아낸다.
+- 이 메소드는 bakeryReviewRepository.findAll()를 호출해서 해당 빵집에 있는 모든 BakeryReview 엔티티 리스트를 데이터베이스에서 찾아낸다.
 - BakeryReview 엔티티 리스트를 찾아낸 뒤, ReviewService는 조회한 BakeryReview 엔티티들을 BakeryReviewResponse DTO 리스트로 변환시킨다.
 - 그러고 나서 ReviewService가 완성된 BakeryReviewResponse 리스트를 BakeryController에게 전달한다.
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 리뷰 목록 조회가 완료된다.
@@ -67,24 +67,26 @@
 ![11_BakeryReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/11-Bakery-Review-Add.jpg?raw=true)
 
 - 사용자가 가게 리뷰를 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 BakeryController가 bakeryId, UserDetailsImpl, BakeryReviewRequest를 인수로 ReviewService의 addBakeryReview() 메소드를 호출하며 비즈니스 로직을 위임한다.
-- ReviewService는 위임을 받은 후, 비즈니스 로직에 따른 추가적인 유효성 확인한다.
-- 유효성을 통과하지 못하면 예외를 발생시킨다.
-- 그리고 사용자의 권한을 확인하여 권한이 없으면 예외를 발생시킨다. 이를 통과하면, createBakeryReview 메소드를 통해 memId, bakeryId, DTO의 내용을 포함하는 BakeryReview 엔티티를 생성한다.
+- 요청을 받은 BakeryController가 bakeryId, 사용자 정보, DTO를 받아 addBakeryReview() 메소드를 실행해서 ReviewService를 호출한다.
+- ReviewService는 사용자의 권한을 확인하여 권한이 없으면 예외를 발생시킨다.
+- 이를 통과하면, ReviewService는 DTO 유효성 확인하여 유효성이 없면 예외를 발생시킨다.
+- 모든 검증을 만족하면 createBakeryReview 메소드를 통해 DTO의 내용을 포함하는 BakeryReview 엔티티를 생성한다.
 - 생성된 엔티티는 bakeryReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
-- 저장 후, ReviewService는 저장된 BakeryReview 엔티티 정보를 BakeryReviewResponse DTO로 변환시키며, 이 DTO를 BakeryController에게 반환한다.
-- 이렇게 받은 최종 응답을 BakeryController가 사용자에게 넘겨줌으로써 가게 리뷰 작성이 성공적으로 완료된다.
+- 저장 후, ReviewService는 저장된 BakeryReview 엔티티 정보를 BakeryReviewResponse DTO로 변환시킨다.
+- 이 DTO를 BakeryController에게 반환한다.
+- 최종 응답을 BakeryController가 사용자에게 넘겨줌으로써 가게 리뷰 작성이 성공적으로 완료된다.
 
 ## 12) 가게 리뷰 수정하기
 ![12_BakeryReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/12-Bakery-Review-Update.jpg?raw=true)
 
 - 사용자가 가게 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 BakeryController가 bakeryId와 reviewId, UserDetailsImpl, BakeryReviewRequest DTO를 가지고 updateBakeryReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 BakeryController가 bakeryId와 reviewId, 사용자 정보, DTO를 가지고 updateBakeryReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 updateBakeryReview() 메소드를 실행한다.
-- 이 메소드는 먼저 bakeryReviewRepository.findById()를 호출해서 수정할 리뷰 엔티티를 데이터베이스에서 찾아낸다.
+- 이 메소드는 먼저 DTO의 유효성을 검사하고 만족하지 못하면 적절한 예외를 처리한다.
+- bakeryReviewRepository.findById()를 호출해서 수정할 리뷰 엔티티를 데이터베이스에서 찾아낸다.
 - 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
-- 현재 로그인한 사용자가 해당 리뷰의 작성자인지 확인하여 수정 권한을 검증한다. 만약 아니면 예외를 발생시켜 중단시킨다.
-- 모든 검증을 통과하면 조회된 BakeryReview 엔티티의 update() 메소드를 호출하여 DTO의 새로운 내용으로 엔티티 필드를 수정한다. 이때 JPA의 Dirty Checking이 적용되므로 별도의 save() 호출 없이 변경 사항이 트랜잭션 종료 시점에 데이터베이스에 반영된다.
+- 사용자의 수정 권한을 검증하고 권한이 없으면 예외를 발생시켜 중단시킨다.
+- 모든 검증을 통과하면 조회된 BakeryReview 엔티티의 update() 메소드를 호출하여 DTO의 새로운 내용으로 엔티티 필드를 수정한다.
 - 수정이 끝난 후, ReviewService는 수정된 BakeryReview 엔티티 정보를 BakeryReviewResponse DTO로 변환시키고, 이 DTO를 BakeryController에게 전달한다.
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 리뷰 수정이 완료된다.
 
@@ -92,15 +94,14 @@
 ![13_BakeryReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/13-Bakery-Review-Delete.jpg?raw=true)
 
 - 사용자가 가게 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 BakeryController는 bakeryId와 reviewId, UserDetailsImpl을 사용하여 bakeryReviewDelete() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 BakeryController는 bakeryId와 reviewId, 사용자 정보를 사용하여 bakeryReviewDelete() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 deleteBakeryReview() 메소드를 실행한다.
-- 이 메소드는 먼저 bakeryReviewRepository.findById()를 호출해서 삭제할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
-- 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
-- 그리고 나서 현재 로그인한 사용자가 해당 리뷰의 작성자인지 확인하여 삭제 권한을 검증한다.
-- 만약 아니면 예외를 발생시켜 중단시킨다.
+- 먼저 bakeryReviewRepository.findById()를 호출해서 삭제할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
+- 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리한다.
+- 사용자가 삭제 권한이 있는지 검증하고 권한이 없으면 예외를 발생시켜 처리한다.
 - 권한이 있고 리뷰 엔티티도 존재한다면 ReviewService는 bakeryReviewRepository.deleteById()를 호출하여 해당 엔티티를 데이터베이스에서 삭제한다.
 - 삭제 작업이 성공적으로 끝나면 ReviewService는 void를 반환하며 BakeryController에게 성공을 알린다.
-- 이렇게 전달받은 정보를 BakeryController가 최종적으로 ResponseEntity<Void>를 사용자에게 넘겨줌으로써 가게 리뷰 삭제가 완료된다.
+- BakeryController가 최종적으로 ResponseEntity<Void>를 사용자에게 넘겨줌으로써 가게 리뷰 삭제가 완료된다.
 
 ## 14) 가게 메뉴 목록 보기
 ![14_MenuListShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/14-Menu-List-Show.jpg?raw=true)
