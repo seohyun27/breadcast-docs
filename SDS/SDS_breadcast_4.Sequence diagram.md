@@ -336,7 +336,18 @@
 - 이렇게 전달받은 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 루트 글 수정이 완료된다.
 
 ## 32) 빵지순례 삭제하기
+![32_CourseDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/32-Course-Delete.jpg?raw=true)
 
+- 사용자가 빵지순례 글을 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 요청을 받은 CourseController는 courseId와 사용자 정보를 가지고 deleteCourse() 메소드를 실행하여 CourseService를 호출한다.
+- CourseService는 deleteCourse() 메소드를 실행한다.
+- 이 메소드는 먼저 사용자에게 삭제 권한이 있는지 확인한다.
+- 만약 권한이 없으면 삭제를 진행하지 않고 예외를 발생시킨다.
+- 권한 확인이 완료되면, CourseService는 코스에 종속된 모든 관련 데이터를 삭제하도록 한다.
+- courseReviewRepository.deleteAllByCourseId(), favoriteCourseRepository.deleteAllByCourseId(), coursePartRepository.deleteAllByCourseId()를 순차적으로 호출하여 모두 데이터베이스에서 삭제한다.
+- courseRepository.deleteById()를 호출하여 Course를 최종적으로 삭제한다.
+- 성공적인 삭제 후 CourseService는 void를 반환하며 CourseController에게 성공을 알린다.
+- 이렇게 전달받은 응답을 CourseController가 최종적으로 사용자에게 넘겨줌으로써 삭제가 완료된다.
 
 ## 33) 닉네임 변경하기
 
