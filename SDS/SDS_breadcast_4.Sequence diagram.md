@@ -135,7 +135,7 @@
 ![16_MenuReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/16-Menu-Review-Add.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 MenuController가 menuId, UserDetailsImpl, AddMenuReviewRequest DTO를 가지고 addMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 MenuController가 menuId, 사용자 정보, DTO를 가지고 addMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 addMenuReview() 메소드를 실행한다.
 - 이 메소드는 먼저 현재 로그인한 사용자의 작성 권한을 검증한다.
 - 만약 아니면 예외를 발생시켜 처리한다.
