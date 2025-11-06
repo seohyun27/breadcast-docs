@@ -119,7 +119,7 @@
 ## 15) 메뉴 리뷰 보기
 ![15_MenuDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/15-Menu-Detail-Show.jpg?raw=true)
 
-- 사용자가 가게 메뉴 상세 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 사용자가 가게 메뉴 리뷰 정보를 포함한 메뉴 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 요청을 받은 MenuController는 menuId, 사용자 정보를 가지고 getMenuDetail() 메소드를 실행하여 MenuService를 호출한다.
 - MenuService는 getMenuDetail() 메소드를 실행한다.
 - 이 메소드는 먼저 menuRepository.findById()를 호출해서 사용자가 원하는 Menu 엔티티를 데이터베이스에서 찾아낸다.
