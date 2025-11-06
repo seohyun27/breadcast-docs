@@ -3,6 +3,8 @@
 
 ## Use case diagram
 
+<img width="2140" height="1676" alt="유스케이스 다이어그램 1" src="https://github.com/user-attachments/assets/298f4b05-13b6-4362-91de-7dee64b3e751" />
+
 이번 장은 use case diagram과 use case description을 제공한다. Diagram에 관한 고려사항은 아래와 같다.
 
 * Use case diagram은 description에 대한 부가적인 결과물에 불과하다. 따라서 이 문서를 읽는 독자는 use case diagram보다 use case description에서 use cases에 대한 충분한 정보를 얻길 바란다.
