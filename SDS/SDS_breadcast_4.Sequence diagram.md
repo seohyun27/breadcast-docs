@@ -179,22 +179,22 @@
 ![19_ReportShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/19-Report-Show.jpg?raw=true)
 
 - 사용자가 제보글을 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 ReportController는 bakeryId, UserDetailsImpl을 사용하여 getReports() 메소드를 실행하여 ReportService를 호출한다.
+- 요청을 받은 ReportController는 bakeryId, 사용자 정보를 사용하여 getReports() 메소드를 실행하여 ReportService를 호출한다.
 - ReportService는 getReports() 메소드를 실행한다.
 - 이 메소드는 bakeryReportRepository.findByBakeryIdOrderByCreatedAtDesc()를 호출하여 해당 bakeryId에 종속된 BakeryReport 엔티티 목록을 최신순으로 정렬하여 데이터베이스에서 찾아낸다.
 - BakeryReport 엔티티 리스트를 찾아낸 뒤, ReportService는 이 리스트를 순회하며 추가 정보를 포함시킨다.
 - 모든 정보가 반영되면, ReportService는 BakeryReport 엔티티 리스트를 ReportsResponse DTO 리스트로 변환시킨다.
 - 그러고 나서 ReportService가 완성된 ReportsResponse 리스트를 ReportController에게 전달한다.
-- 이렇게 전달받은 정보를 ReportController가 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 목록 조회가 완료된다.
+- 이렇게 전달받은 정보를 ReportController가 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 보기가 완료된다.
 
 ## 20) 제보하기
 ![20_ReportAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/20-Report-Add.jpg?raw=true)
 
 - 사용자가 제보글을 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 ReportController는 bakeryId, UserDetailsImpl, AddReportRequest DTO를 가지고 addReport() 메소드를 실행하여 ReportService를 호출한다.
+- 요청을 받은 ReportController는 bakeryId, 사용자 정보, DTO를 가지고 addReport() 메소드를 실행하여 ReportService를 호출한다.
 - ReportService는 addReport() 메소드를 실행한다.
 - 이 메소드는 먼저 사용자가 쓰기 권한이 있는지 검증한다.
-- 권한이 일치하지 않으면 예외를 발생시킨다.
+- 권한이 없으면 예외를 발생시킨다.
 - 그리고 나서 제보글에 필요한 필수 정보가 올바른지 확인하는 유효성 검증을 수행한다.
 - 이 검증이 완료되면, ReportService는 memId, bakeryId, DTO의 내용을 포함하는 BakeryReport 엔티티를 생성한다.
 - 생성된 엔티티는 bakeryReportRepository.save()를 호출하여 데이터베이스에 저장된다.
@@ -205,12 +205,12 @@
 ![21_ReportDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/21-Report-Delete.jpg?raw=true)
 
 - 사용자가 제보글을 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 ReportController는 reportId와 UserDetailsImpl를 가지고 deleteBakeryReport() 메소드를 실행하여 ReportService를 호출한다.
+- 요청을 받은 ReportController는 reportId와 사용자 정보를 가지고 deleteBakeryReport() 메소드를 실행하여 ReportService를 호출한다.
 - ReportService는 deleteBakeryReport() 메소드를 실행한다.
 - 이 메소드는 먼저 bakeryReportRepository.findById를 호출해서 삭제할 제보 엔티티가 데이터베이스에 존재하는지 확인한다.
 - 만약 해당 제보글이 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 제보 엔티티를 찾은 뒤, ReportService는 삭제 권한을 검증한다.
-- 권한이 일치하지 않으면 예외를 발생시킨다.
+- 권한이 없으면 예외를 발생시킨다.
 - 권한 확인이 끝나면 bakeryReportRepository.deleteById()를 호출하여 데이터베이스에서 해당 제보를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReportService는 void를 반환하며 ReportController에게 성공을 알린다.
 - 이렇게 전달받은 성공 응답을 ReportController가 ResponseEntity 상태로 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 삭제가 완료된다.
