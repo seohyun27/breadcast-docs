@@ -66,7 +66,7 @@ Member 객체를 감싸 Spring Security의 UserDetails 인터페이스 규격에
 | UserDetailsImpl | Member member | (constructor) | Member 객체를 주입받는 생성자                                   |
 | getUserId |               | long | Member의 고유 ID를 반환하는 메소드                               |
 | getMember |          | Member | 내부의 Member 객체를 반환하는 메소드                               |
-| getAuthorities |          | Collection<? extends GrantedAuthority> | 사용자의 권한 목록을 반환 (UserDetails 인터페이스 구현)                 |
+| getAuthorities |          | `Collection<? extends GrantedAuthority>` | 사용자의 권한 목록을 반환 (UserDetails 인터페이스 구현)                 |
 | getPassword |          | String | Member의 password를 반환 (UserDetails 인터페이스 구현)           |
 | getUsername |           | String | Member의 loginId를 username으로 반환 (UserDetails 인터페이스 구현) |
 | isEnabled |           | boolean | Member의 active 상태를 반환 (UserDetails 인터페이스 구현)          |
@@ -603,7 +603,7 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 | createCourse | UserDetailsImpl userDetails, CourseRequest request | `ResponseEntity<CourseResponse>` | 새로운 코스를 생성하는 요청을 처리 |
 | updateCourse | Long courseId, UserDetailsImpl userDetails, CourseRequest request | `ResponseEntity<CourseResponse>` | 특정 코스를 수정하는 요청을 처리 |
 | deleteCourse | Long courseId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 코스를 삭제하는 요청을 처리 |
-| getPopularCourses | | List<GetSimpleCoursesResponse> | 인기 코스 목록을 조회하는 요청을 처리 |
+| getPopularCourses | | `List<GetSimpleCoursesResponse>` | 인기 코스 목록을 조회하는 요청을 처리 |
 | searchCourses | SearchCourseRequest request | `List<GetSimpleCoursesResponse>` | 코스를 검색하는 요청을 처리 |
 | getCourseDetail | Long courseId, UserDetailsImpl userDetails | CourseDetailResponse | 특정 코스의 상세 정보를 조회하는 요청을 처리 |
 
@@ -822,9 +822,6 @@ BakeryReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | Name | Type | Visibility | Description |
 | :--- | :--- | :--- | :--- |
 |  | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
-Operations
-
-Markdown
 
 #### 2. Operations
 | Name | Argument | Returns | Description |
