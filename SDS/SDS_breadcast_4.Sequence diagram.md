@@ -141,9 +141,7 @@
 - 만약 아니면 예외를 발생시켜 처리한다.
 - menuRepository.findById()를 호출하여 리뷰를 작성할 메뉴가 실제로 존재하는지 확인한다.
 - 만약 메뉴가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
-- 그리고 나서 추가로 DTO 유효성도 검증한다.
-- 유효하지 않으면 예외를 발생시켜 적절하게 처리한다.
-- 조건을 다 통과하면, ReviewService는 memId, menuId, DTO의 내용을 포함하는 MenuReview 엔티티를 생성한다.
+- 조건을 다 통과하면, ReviewService는 DTO의 내용을 포함하는 MenuReview 엔티티를 생성한다.
 - 생성된 엔티티는 menuReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
 - 저장이 완료된 후, ReviewService는 저장된 MenuReview 엔티티 정보를 MenuReviewResponse DTO로 변환시키며, 이 DTO를 MenuController에게 전달한다.
 - 이렇게 받은 최종 응답을 MenuController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 메뉴 리뷰 작성이 성공적으로 완료된다.
