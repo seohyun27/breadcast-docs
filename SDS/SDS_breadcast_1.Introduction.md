@@ -1,3 +1,30 @@
+## [ Revision history ]
+
+| Revision date | Version \# | Description | Author |
+| :--- | :--- | :--- | :--- |
+| 2025/00/00 | 1.00 | 초기 버전 작성 | 팀 전원 |
+| 2025.09.09 | 1.01 | 규격 통일 및 세부 사항 추가 | 김서연 |
+| 2025.09.23 | 1.10 | UI를 바탕으로 수정 | |
+| 2025.09.23 | 1.11 | 이름 통일 및 전체 수정 | |
+
+
+## = Authors for each section =
+| Section                    | Authors       |
+|:---------------------------|:--------------|
+| Introduction               | 김현지, 노은재, 이지원 |
+| Use case analysis          | 팀 전원          |
+| Class diagram              | 김서현           |
+| Sequence diagram            | 김서연, 박세은      |
+| State machine diagram      | 김서연           |
+| User interface prototype   | 김현지, 노은재, 이지원 |
+| Implementation requirements | 김서현           |
+| Glossary                   | 김현지, 노은재, 이지원              |
+| References                 | 김현지, 노은재, 이지원          |
+
+---
+
+<br>
+
 # 1. Introduction
 <img width="216" height="95" alt="Group 321" src="https://github.com/user-attachments/assets/0debf390-81fc-49f7-bda2-97490a9d2d01" />
 
