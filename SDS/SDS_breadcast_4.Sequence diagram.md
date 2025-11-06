@@ -150,12 +150,12 @@
 ![17_MenuReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/17-Menu-Review-Update.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다..
-- 요청을 받은 MenuController는 reviewId, UserDetailsImpl, UpdateMenuReviewRequest DTO를 가지고 updateMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 MenuController는 reviewId, 사용자 정보, DTO를 가지고 updateMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 updateMenuReview() 메소드를 실행한다.
 - 이 메소드는 먼저 menuReviewRepository.findById()를 호출해서 수정할 리뷰 엔티티를 데이터베이스에서 찾아낸다.
 - 만약 해당 리뷰 ID가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 리뷰 엔티티를 찾은 뒤, ReviewService는 수정 권한을 검증한다.
-- 수정 권한 일치하지 않으면 예외를 발생시켜 처리한다.
+- 수정 권한이 없으면 예외를 발생시켜 처리한다.
 - UpdateMenuReviewRequest의 유효성도 검증한다.
 - 검증이 완료되면, 조회된 리뷰 엔티티에 MenuReview.update() 메소드를 호출하여 DTO의 새로운 내용(별점, 내용)을 반영한다.
 - 수정이 완료된 후, ReviewService는 수정된 MenuReview 엔티티 정보를 MenuReviewResponse DTO로 변환시키며, 이 DTO를 MenuController에게 전달한다.
