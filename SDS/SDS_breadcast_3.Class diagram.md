@@ -249,10 +249,10 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 |  | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
+| Name | Argument | Returns              | Description |
+| :--- | :--- |:---------------------| :--- |
 | findByMemberId | Long memId | `List<BakeryReport>` | 특정 회원이 작성한 모든 빵집 제보 목록을 조회 |
-| findByBakeryIdOrderByCreatedAtDesc | Long bakeryId, Pageable pageable | `Page<BakeryReport>` | 특정 빵집의 제보 목록을 최신순으로 조회 |
+| findByBakeryIdOrderByCreatedAtDesc | Long bakeryId | `List<BakeryReport>` | 특정 빵집의 제보 목록을 최신순으로 조회 |
 | findByCreatedAtBefore | LocalDateTime createdAt | `List<BakeryReport>` | 특정 시각 이전에 생성된 모든 빵집 제보 목록을 조회 |
 
 ---
@@ -520,10 +520,10 @@ Course 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 �
 |      | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| findByMemberId | Long memId | List<Course> | 특정 회원이 생성한 모든 코스 목록을 조회 |
-| findByTitleContainingOrKeywordContaining | String title, String keyword, Pageable pageable | Page<Course> | 제목 또는 키워드에 특정 문자열이 포함된 코스를 검색 |
+| Name | Argument | Returns        | Description |
+| :--- | :--- |:---------------| :--- |
+| findByMemberId | Long memId | `List<Course>` | 특정 회원이 생성한 모든 코스 목록을 조회 |
+| findByTitleContainingOrKeywordContaining | String title, String keyword | `List<Course>`   | 제목 또는 키워드에 특정 문자열이 포함된 코스를 검색 |
 
 ---
 
