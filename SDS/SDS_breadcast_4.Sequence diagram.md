@@ -165,12 +165,12 @@
 ![18_MenuReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/18-Menu-Review-Delete.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 MenuController는 reviewId, UserDetailsImpl를 가지고 deleteMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 MenuController는 reviewId, 사용자 정보를 가지고 deleteMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 deleteMenuReview() 메소드를 실행한다.
 - 이 메소드는 먼저 menuReviewRepository.findById()를 호출해서 삭제할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
 - 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 리뷰 엔티티를 찾은 뒤, ReviewService는 삭제 권한을 검증한다.
-- 권한이 일치하지 않으면 예외를 발생시켜 처리한다.
+- 권한이 없으면 예외를 발생시켜 처리한다.
 - 권한 확인이 끝나면 menuReviewRepository.deleteById()를 호출하여 데이터베이스에서 메뉴 리뷰를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReviewService는 void를 반환하며 MenuController에게 성공을 알린다.
 - 이렇게 전달받은 성공 응답을 MenuController가 ResponseEntity<Void>로 최종적으로 사용자에게 넘겨줌으로써 메뉴 리뷰 삭제가 완료된다.
