@@ -120,7 +120,7 @@
 ![15_MenuDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/15-Menu-Detail-Show.jpg?raw=true)
 
 - 사용자가 가게 메뉴 상세 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 MenuController는 menuId, UserDetailsImpl을 사용하여 가지고 getMenuDetail() 메소드를 실행하여 MenuService를 호출한다.
+- 요청을 받은 MenuController는 menuId, 사용자 정보를 가지고 getMenuDetail() 메소드를 실행하여 MenuService를 호출한다.
 - MenuService는 getMenuDetail() 메소드를 실행한다.
 - 이 메소드는 먼저 menuRepository.findById()를 호출해서 사용자가 원하는 Menu 엔티티를 데이터베이스에서 찾아낸다.
 - 만약 해당 메뉴가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
@@ -128,7 +128,7 @@
 - countByMenuId()를 호출하여 총 리뷰 수를 가져오고, 내부 메소드인 getAverageRating() 실행을 위해 findByMenuId()를 호출하여 모든 리뷰 데이터를 가져온 뒤 이를 활용하여 평균 별점을 계산한다.
 - 계산된 평균 별점과 리뷰 수, 그리고 메뉴의 기본 정보를 통합하여 GetMenuDetailResponse DTO를 구성한다.
 - MenuService는 이 DTO에 계산된 평균 별점과 리뷰 수를 직접 설정한다.
-- MenuService가 모든 정보가 반영된 GetMenuDetailResponse를 MenuController에게 전달한다.
+- MenuService가 모든 정보가 반영된 GetMenuDetailResponse DTO를 MenuController에게 전달한다.
 - 이렇게 전달받은 정보를 MenuController가 최종적으로 사용자에게 넘겨줌으로써 메뉴 상세 정보 조회가 완료된다.
 
 ## 16) 메뉴 리뷰 쓰기
