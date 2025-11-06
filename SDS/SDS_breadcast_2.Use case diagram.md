@@ -2,8 +2,16 @@
 
 
 ## Use case diagram
-(이미지와 함께 설명을 넣어주세요)
 
+이번 장은 use case diagram과 use case description을 제공한다. Diagram에 관한 고려사항은 아래와 같다.
+
+* Use case diagram은 description에 대한 부가적인 결과물에 불과하다. 따라서 이 문서를 읽는 독자는 use case diagram보다 use case description에서 use cases에 대한 충분한 정보를 얻길 바란다.
+* Use case diagram에 나타난 use case는 모두 user-goal level use cases이다.
+* 사용자는 breadcast를 사용하는 모든 사용자(비로그인, 로그인 회원 포함)를 포괄적으로 지칭한다.
+* 시스템은 사용자의 로그인 상태에 따라 접근할 수 있는 기능이 구분된다.
+    * 비로그인 사용자 : '가게 검색하기', '빵지순례 상세페이지 보기' 등 정보 조회 중심의 기능을 사용할 수 있다.
+    * 로그인한 사용자 : 정보 조회 기능 외에 '리뷰 작성하기', '관심 가게 추가하기', '마이페이지 조회' 등 모든 개인화 기능을 사용할 수 있다.
+* '로그인하기' 유스케이스는 비로그인 사용자가 로그인한 사용자로 전환되는 핵심 지점이다.
 ***
 
 ## Use case description
