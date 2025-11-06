@@ -13,7 +13,7 @@
 
 
 ## 5) 가게 검색하기
-![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search.jpg?raw=true)
+![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/05-Bakery-Search.jpg?raw=true)
 
 - 사용자가 가게 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - BakeryController가 DTO를 받아 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
@@ -24,7 +24,7 @@
 - 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 검색이 완료된다.
 
 ## 6) 가게 정렬하기
-![6_BakerySort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/6-Bakery-Sort.jpg?raw=true)
+![6_BakerySort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/06-Bakery-Sort.jpg?raw=true)
 
 - 사용자가 가게 목록을 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 요청을 받은 BakeryController는 정렬 기준 정보가 들어있는 DTO를 가지고 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
@@ -35,7 +35,7 @@
 - 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 목록 정렬이 완료된다.
 
 ## 7) 가게 정보 보기
-![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-Bakery-Detail-Show.jpg?raw=true)
+![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/07-Bakery-Detail-Show.jpg?raw=true)
 
 - 사용자가 원하는 가게의 자세한 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - BakeryController는 요청을 받아서 bakeryId, 사용자 정보를 가지고 getBakeryDetail() 메소드를 실행하여 BakeryService를 호출한다.
