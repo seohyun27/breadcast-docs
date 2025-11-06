@@ -232,7 +232,7 @@
 ![23_CourseSearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/23-Course-Search.jpg?raw=true)
 
 - 사용자가 빵지순례 글을 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 CourseController는 SearchCourseRequest DTO를 가지고 searchCourses() 메소드를 실행하여 CourseService를 호출한다.
+- 요청을 받은 CourseController는 DTO를 가지고 searchCourses() 메소드를 실행하여 CourseService를 호출한다.
 - CourseService는 searchCourses() 메소드를 실행한다
 - 이 메소드는 courseRepository.findByTitleContainingOrKeywordContaining()를 호출하여 사용자가 입력한 키워드를 기반으로 여기에 맞는 Course 엔티티 목록을 데이터베이스에서 찾아낸다.
 - 검색된 Course 엔티티 목록을 찾아낸 뒤, CourseService는 이 목록을 순회하며 각 코스에 대한 추가 정보를 계산한다.
@@ -245,7 +245,7 @@
 ![24_CourseDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/24-Course-Detail-Show.jpg?raw=true)
 
 - 사용자가 빵지순례 글 상세 정보를 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 이 요청을 받은 CourseController는 courseId와 UserDetailsImpl를 가지고 getCourseDetail() 메소드를 실행하여 CourseService를 호출한다.
+- 이 요청을 받은 CourseController는 courseId와 사용자 정보를 가지고 getCourseDetail() 메소드를 실행하여 CourseService를 호출한다.
 - CourseService는 getCourseDetail() 메소드를 실행한다.
 - 이 메소드는 코스 상세 정보 조회를 위해 여러 리포지토리에서 데이터를 가져와 하나의 객체로 통합한다.
 - 먼저 courseRepository.findById()를 호출하여 코스의 기본 정보를 가져온다.
@@ -267,10 +267,10 @@
 ![27_CourseReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/27-Course-Review-Add.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 달 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 CourseController는 courseId, UserDetailsImpl, CourseReviewRequest DTO를 가지고 addCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 CourseController는 courseId, 사용자 정보, DTO를 가지고 addCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 addCourseReview(Long courseId, Long memId, CourseReviewRequest request) 메소드를 실행한다.
 - 이 메소드는 먼저 courseRepository.findById()를 호출하여 리뷰를 작성할 코스가 실제로 존재하는지 확인한다.
-- 만약 코스가 존재하지 않으면 예외를 발생시켜 중단한다. 코스의 존재가 확인되면, 그 다음으로 사용자의 권한을 확인한다.
+- 만약 코스가 없으면 예외를 발생시켜 중단한다. 코스의 존재가 확인되면, 그 다음으로 사용자의 권한을 확인한다.
 - 권한이 없으면 예외를 발생시킨다.
 - 권한이 존재한다면 ReviewService는 DTO의 내용을 포함하는 CourseReview 엔티티를 생성한다.
 - 생성된 엔티티는 courseReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
@@ -281,7 +281,7 @@
 ![28_CourseReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/28-Course-Review-Update.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 CourseController는 @PathVariable에서 courseReviewId, UserDetailsImpl, 그리고 CourseReviewRequest DTO를 가지고 updateCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 CourseController는 courseReviewId, 사용자 정보, 그리고 DTO를 가지고 updateCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 updateCourseReview() 메소드를 실행한다.
 - 이 메소드는 먼저 courseReviewRepository.findById()를 호출해서 수정할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
 - 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
@@ -295,10 +295,10 @@
 ![29_CourseReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/29-Course-Review-Delete.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 이 요청을 받은 CourseController는 courseReviewId, UserDetailsImpl을 이용하여 deleteCourseReview() 메소드를 실행하여서 ReviewService를 호출한다.
+- 이 요청을 받은 CourseController는 courseReviewId, 사용자 정보를 이용하여 deleteCourseReview() 메소드를 실행하여서 ReviewService를 호출한다.
 - ReviewService는 deleteCourseReview() 메소드를 실행한다.
 - 이 메소드는 먼저 courseReviewRepository.findById()를 호출해서 삭제할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
-- 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
+- 만약 해당 리뷰가 없으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 리뷰 엔티티를 찾은 뒤, ReviewService는 조회된 리뷰 엔티티의 삭제 권한이 사용자에게 있는지 확인하여 삭제 권한을 검증하는 중요한 역할을 수행한다.
 - 만약 권한이 없으면 삭제를 진행하지 않고 예외를 발생시킨다.
 - 권한 확인이 완료되면, courseReviewRepository.deleteById()를 호출하여 데이터베이스에서 해당 리뷰를 삭제한다.
