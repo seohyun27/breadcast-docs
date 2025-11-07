@@ -2,34 +2,43 @@
 
 ## 1) 회원 가입하기
 ![1_Signup](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/01-Signup.jpg?raw=true)
-###
+
 - 사용자가 회원가입을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - AuthController가 SignupRequest DTO를 받아 addMember() 메소드를 실행하여 MemberService를 호출한다.
 - MemberService는 addMember() 메소드를 실행한다.
-- 이 메소드는 먼저 MemberRepository를 호출하여 existsByLoginId()와 existsByNickname()을 통해 아이디와 닉네임의 중복 여부를 확인한다.
-- 중복이 없으면 passwordEncoder로 비밀번호를 암호화한 뒤, save() 메소드를 호출하여 Member 엔티티를 데이터베이스에 저장한다.
-- MemberService가 저장된 Member 엔티티를 MemberResponse DTO로 변환하여 AuthController에게 전달한다.
-- 전달받은 정보를 AuthController가 최종적으로 사용자에게 넘겨줌으로써 회원가입이 완료된다.
+- 이 메소드는 먼저 validateInput() 메소드를 실행하여 유효한 회원가입 정보를 입력받았는지 확인하고, 결과에 따라 true 혹은 false를 반환한다.
+- 유효한 정보이면 passwordEncoder를 호출하여 비밀번호를 암호화한다.
+- createMember() 메소드를 통해 엔티티를 만든 후 MemberRepository의 save() 메소드를 호출하여 Member 엔티티를 데이터베이스에 저장한다.
+- Member 엔티티를 반환받은 MemberService가 MemberResponse DTO로 변환하여 AuthController에게 전달한다.
+- AuthController가 DTO를 포함한 최종 응답을 사용자에게 넘겨줌으로써 회원가입이 완료된다.
 
 ## 2) 로그인하기
 ![2_Login](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/02-Login.jpg?raw=true)
-### 사진 틀림
+
 - 사용자가 로그인을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 사용자가 LoginRequest DTO로 로그인을 요청하면, JwtAuthenticationFilter가 이를 받아 attemptAuthentication() 메소드를 실행한다.
+- 사용자가 LoginRequest DTO로 로그인을 요청하면, AuthController가 이를 받아 authenticate() 메소드를 실행한다.
 - 이 메소드는 AuthenticationManager를 호출하여 실제 인증을 시도한다.
-- AuthenticationManager는 내부적으로 UserDetailsService를 호출하고, 이는 loadUserByUsername() 메소드를 통해 MemberRepository에서 findByLoginId()로 사용자를 조회한다.
-- 사용자 정보가 확인되고 passwordEncoder를 통해 비밀번호가 일치하면, 인증된 Authentication 객체가 JwtAuthenticationFilter로 반환된다.
-- 필터는 successfulAuthentication() 메소드 내에서 JwtUtil을 호출하여, createToken()으로 Access Token과 Refresh Token을 생성한다.
-- 생성된 토큰 정보를 JwtAuthenticationFilter가 최종적으로 사용자에게 응답 헤더(또는 바디)에 담아 넘겨줌으로써 로그인이 완료된다.
+- AuthenticationManager는 내부적으로 UserDetailsService(혹은 CustomAuthenticationProvider로 구현할 수 있음)를 호출하고, 이는 loadUserByUsername() 메소드를 통해 MemberRepository에서 findByLoginId()로 사용자를 조회한다.
+- 사용자 정보가 확인되고 passwordEncoder를 통해 비밀번호 일치를 확인하면, 인증된 Authentication 객체가 반환된다.
+- AuhenticationManager에게서 Authentication 객체를 반환받은 Authcontroller가 SecurityContextHolder를 호출하여 setContext() 메소드로 로그인 사용자 정보를 등록한다.
+- AuthController가 DTO를 포함한 최종 응답을 사용자에게 넘겨줌으로써 로그인이 완료된다.
 
 ## 3) 로그아웃하기
 ![3_Logout](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/03-Logout.jpg?raw=true)
 
+- 사용자가 로그아웃을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 사용자가 로그아웃을 요청하면, SpringSecurityFilter가 이를 받아 logout()으로 SecurityContextLogoutHandler를 호출한다.
+- SpringSecurityFilter는 SecurityContextHolder를 clearContext() 메소드를 통해 호출하면, 사용자의 인증 정보가 현재 스레드에서 지워지고 로그아웃 처리된다.
+- AuthController가 최종 응답을 사용자에게 넘겨줌으로써 로그아웃이 완료된다.
 
 ## 4) 회원 탈퇴하기
 ![4_Withdraw](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/04-Withdraw.jpg?raw=true)
 
-- 사용자가 
+- 사용자가 회원 탈퇴를 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 사용자가 회원 탈퇴를 요청하면, AuthController가 이를 받아 사용자 인증을 수행한다.
+- AuthController는 이렇게 획득한 사용자 id로 MemberService를 deleteMember()로 호출한다.
+- MemberService는 MemberRepository를 통해 deleteById()를 수행하여 사용자 정보를 삭제한다.
+- AuthController가 DTO를 포함한 최종 응답을 사용자에게 넘겨줌으로써 회원 탈퇴가 완료된다.
 
 ## 5) 가게 검색하기
 ![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search.jpg?raw=true)
