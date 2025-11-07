@@ -429,7 +429,7 @@
 
 ## 34) 관심 가게 목록 보기
 
-![34_FavoriteBakeriesShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/34-Favorite-Bakeries-Show.jpg)
+![34_FavoriteBakeryShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/34-Favorite-Bakery-Show.jpg)
 
 - 사용자가 관심 가게 목록을 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 인증 정보(memId)를 받아 getFavoriteBakeries() 메소드를 실행하여 FavoriteService를 호출한다.
