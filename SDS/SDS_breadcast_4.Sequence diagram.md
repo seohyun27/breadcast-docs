@@ -1,16 +1,35 @@
 # 4. Sequence diagram
 
 ## 1) 회원 가입하기
-
+![1_Signup](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/01-Signup.jpg?raw=true)
+###
+- 사용자가 회원가입을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- AuthController가 SignupRequest DTO를 받아 addMember() 메소드를 실행하여 MemberService를 호출한다.
+- MemberService는 addMember() 메소드를 실행한다.
+- 이 메소드는 먼저 MemberRepository를 호출하여 existsByLoginId()와 existsByNickname()을 통해 아이디와 닉네임의 중복 여부를 확인한다.
+- 중복이 없으면 passwordEncoder로 비밀번호를 암호화한 뒤, save() 메소드를 호출하여 Member 엔티티를 데이터베이스에 저장한다.
+- MemberService가 저장된 Member 엔티티를 MemberResponse DTO로 변환하여 AuthController에게 전달한다.
+- 전달받은 정보를 AuthController가 최종적으로 사용자에게 넘겨줌으로써 회원가입이 완료된다.
 
 ## 2) 로그인하기
-
+![2_Login](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/02-Login.jpg?raw=true)
+### 사진 틀림
+- 사용자가 로그인을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 사용자가 LoginRequest DTO로 로그인을 요청하면, JwtAuthenticationFilter가 이를 받아 attemptAuthentication() 메소드를 실행한다.
+- 이 메소드는 AuthenticationManager를 호출하여 실제 인증을 시도한다.
+- AuthenticationManager는 내부적으로 UserDetailsService를 호출하고, 이는 loadUserByUsername() 메소드를 통해 MemberRepository에서 findByLoginId()로 사용자를 조회한다.
+- 사용자 정보가 확인되고 passwordEncoder를 통해 비밀번호가 일치하면, 인증된 Authentication 객체가 JwtAuthenticationFilter로 반환된다.
+- 필터는 successfulAuthentication() 메소드 내에서 JwtUtil을 호출하여, createToken()으로 Access Token과 Refresh Token을 생성한다.
+- 생성된 토큰 정보를 JwtAuthenticationFilter가 최종적으로 사용자에게 응답 헤더(또는 바디)에 담아 넘겨줌으로써 로그인이 완료된다.
 
 ## 3) 로그아웃하기
+![3_Logout](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/03-Logout.jpg?raw=true)
 
 
 ## 4) 회원 탈퇴하기
+![4_Withdraw](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/04-Withdraw.jpg?raw=true)
 
+- 사용자가 
 
 ## 5) 가게 검색하기
 ![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search.jpg?raw=true)
@@ -47,10 +66,27 @@
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 정보 조회가 완료된다.
 
 ## 8) 가게 관심 추가하기(스크랩하기)
-
+![8-FavoriteBakeryAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/08-Favorite-Bakery-Add.jpg?raw=true)
+### 이미지 오류(메세지 위치, 사용자 정보 접근 위치)
+### 다이어그램 오류
+- 사용자가 가게를 관심 목록에 추가할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
+- FavoriteController가 경로 변수(bakeryId)와 인증 정보(memId)를 받아 addFavoriteBakery() 메소드를 실행하여 FavoriteService를 호출한다.
+- FavoriteService는 addFavoriteBakery() 메소드를 실행한다.
+- 이 메소드는 먼저 FavoriteBakeryRepository를 호출하여 findById()로 해당 가게가 존재하는지 확인한다.
+- 그 다음, FavoriteBakeryRepository의 existsByMemberIdAndBakeryId()를 호출하여 사용자가 이미 해당 가게를 관심 목록에 추가했는지 중복 검사를 한다.
+- 중복이 아니면 FavoriteBakery 엔티티를 생성한 뒤 FavoriteBakeryRepository의 save() 메소드를 호출하여 데이터베이스에 저장한다.
+- FavoriteService가 작업 완료를 FavoriteController에게 전달한다.
+- FavoriteController가 사용자에게 최종 응답을 넘겨줌으로써 가게 관심 추가가 완료된다.
 
 ## 9) 가게 관심 삭제하기
-
+![9-FavoriteBakeryDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/09-Favorite-Bakery-Delete.jpg?raw=true)
+### 로그인 정보 위치
+- 사용자가 가게를 관심 목록에서 삭제할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
+- FavoriteController가 경로 변수(bakeryId)와 인증 정보(memId)를 받아 deleteFavoriteBakery() 메소드를 실행하여 FavoriteService를 호출한다.
+- FavoriteService는 deleteFavoriteBakery() 메소드를 실행한다.
+- 이 메소드는 FavoriteBakeryRepository룰 호출하여 deleteByMemberIdAndBakeryId() 매소드로 해당하는 엔티티를 삭제한다.
+- FavoriteService가 작업 완료를 FavoriteController에게 전달한다.
+- FavoriteController가 사용자에게 최종 응답을 넘겨줌으로써 가게 관심 삭제가 완료된다.
 
 ## 10) 가게 리뷰 보기
 ![10_BakeryReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/10-Bakery-Review-Show.jpg?raw=true)
@@ -260,10 +296,27 @@
 - 이렇게 전달받은 정보를 CourseController가 최종적으로 사용자에게 넘겨줌으로써 빵지순례 글 상세 정보 조회가 완료된다.
 
 ## 25) 빵지순례 관심 추가하기
-
+![25_FavoriteCourseAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/25-Favorite-Course-Add.jpg?raw=true)
+### 로그인 정보 위치
+### 존재여부 확인 수정
+- 사용자가 빵지순례를 관심 목록에 추가할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
+- FavoriteController가 경로 변수(courseId)와 인증 정보(memId)를 받아 addFavoriteCourse() 메소드를 실행하여 FavoriteService를 호출한다.
+- FavoriteService는 addFavoriteCourse() 메소드를 실행한다.
+- 이 메소드는 먼저 CourseRepository를 호출하여 findById()로 해당 루트(코스)가 존재하는지 확인한다.
+- 그 다음, FavoriteCourseRepository의 existsByMemberIdAndCourseId()를 호출하여 사용자가 이미 해당 루트를 즐겨찾기 했는지 중복 검사를 한다.
+- 중복이 아니면 createFavoriteCourse()로 FavoriteCourse 엔티티를 생성한 뒤 FavoriteCourseRepository의 save() 메소드를 호출하여 데이터베이스에 저장한다.
+- FavoriteService가 작업 완료를 FavoriteController에게 전달한다.
+- FavoriteController가 사용자에게 최종 응답을 넘겨줌으로써 루트 즐겨찾기 추가가 완료된다.
 
 ## 26) 빵지순례 관심 삭제하기
-
+![26_FavoriteCourseDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/26-Favorite-Course-Delete.jpg?raw-true)
+### 로그인 위치
+- 사용자가 빵지순례를 관심 목록에서 삭제할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
+- FavoriteController가 경로 변수(courseId)와 인증 정보(memId)를 받아 deleteCourseFavorite() 메소드를 실행하여 FavoriteService를 호출한다.
+- FavoriteService는 deleteFavoriteCourse() 메소드를 실행한다.
+- 이 메소드는 FavoriteCourseRepository를 호출하여 deleteByMemberIdAndCourseId() 매소드로 해당하는 엔티티를 삭제한다.
+- FavoriteService가 작업 완료를 FavoriteController에게 전달한다.
+- FavoriteController가 사용자에게 최종 응답을 넘겨줌으로써 가게 관심 삭제가 완료된다.
 
 ## 27) 빵지순례 리뷰 쓰기
 ![27_CourseReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/27-Course-Review-Add.jpg?raw=true)
@@ -358,22 +411,82 @@
 - 이렇게 전달받은 응답을 CourseController가 최종적으로 사용자에게 넘겨줌으로써 삭제가 완료된다.
 
 ## 33) 닉네임 변경하기
-
+![33_ProfileChange](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/33-Profile-Change.jpg?raw=true)
+### 닉네임 변경으로 이름 바꾸기
+### 사용자 정보 획득
+### 순서 바꾸기
+### update -> update()
+### 갈아엎기
+- 사용자가 닉네임을 변경할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- MemberController가 ProfileRequest DTO와 인증 정보(memId)를 받아 updateNickname() 메소드를 실행하여 MemberService를 호출한다.
+- MemberService는 updateNickname() 메소드를 실행한다.
+- 이 메소드는 먼저 MemberRepository를 호출하여 existsByNickname()으로 변경하려는 닉네임의 중복 여부를 확인한다.
+- 그 다음, MemberRepository의 findById()를 호출하여 memId에 해당하는 Member 엔티티를 조회한다.
+- MemberService가 조회된 Member 엔티티를 update() 메소드로 변경한다.
+- MemberService가 변경된 엔티티 정보를 MemberResponse DTO로 변환하여 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 닉네임 변경이 완료된다.
 
 ## 34) 관심 가게 목록 보기
+### 파일 이름 바꾸기
+![34_FavoriteBakeriesShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/34-Favorite-Bakeries-Show.jpg)
 
+- 사용자가 관심 가게 목록을 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- FavoriteController가 인증 정보(memId)를 받아 getFavoriteBakeries() 메소드를 실행하여 FavoriteService를 호출한다.
+- FavoriteService는 getFavoriteBakeries() 메소드를 실행한다.
+- 이 메소드는 FavoriteBakeryRepository를 호출하여 findByMemberId()로 해당 회원이 즐겨찾기한 Bakery 엔티티 목록을 데이터베이스에서 조회한다.
+- MemberService가 조회된 Bakery 엔티티 리스트를 GetFavoriteBakeriesResponse DTO 리스트로 변환시킨다.
+- MemberService가 완성된 DTO 리스트를 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 관심 루트 목록 조회가 완료된다.
 
 ## 35) 관심 빵지순례 목록 보기
+![35_FavoriteCourseShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/35-Favorite-Course-Show.jpg)
 
+- 사용자가 관심 빵지순례 목록을 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- FavoriteController가 인증 정보(memId)를 받아 getFavoriteCourses() 메소드를 실행하여 FavoriteService를 호출한다.
+- FavoriteService는 getFavoriteCourses() 메소드를 실행한다.
+- 이 메소드는 FavoriteCoursesRepository를 호출하여 findByMemberId()로 해당 회원이 즐겨찾기한 Course 엔티티 목록을 데이터베이스에서 조회한다.
+- MemberService가 조회된 Course 엔티티 리스트를 GetFavoriteCourseResponse DTO 리스트로 변환시킨다.
+- MemberService가 완성된 DTO 리스트를 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 관심 루트 목록 조회가 완료된다.
 
 ## 36) 내가 쓴 가게 리뷰 보기
-
+![36_MyBakeryReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/36-My-Bakery-Review-Show.jpg?raw=true)
+### reivew->reviews
+- 사용자가 본인이 쓴 가게 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- MemberController가 인증 정보(memId)를 받아 getMyBakeryReviews() 메소드를 실행하여 MemberService를 호출한다.
+- MemberService는 getMyBakeryReviews() 메소드를 실행한다.
+- 이 메소드는 BakeryReviewRepository를 호출하여 findByMemberId()로 해당 회원이 작성한 BakeryReview 엔티티 목록을 데이터베이스에서 조회한다.
+- MemberService가 조회된 BakeryReview 엔티티 리스트를 GetMyBakeryReviewsResponse DTO 리스트로 변환시킨다.
+- MemberService가 완성된 DTO 리스트를 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 내가 쓴 가게 리뷰 목록 조회가 완료된다.
 
 ## 37) 내가 쓴 메뉴 리뷰 보기
-
+![37_MyMenuReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/37-My-Menu-Review-Show.jpg)
+- 사용자가 본인이 쓴 가게 메뉴 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- MemberController가 인증 정보(memId)를 받아 getMyMenuReviews() 메소드를 실행하여 ReviewService를 호출한다.
+- ReivewService는 getMyMenuReviews() 메소드를 실행한다.
+- 이 메소드는 MenuReviewRepository를 호출하여 findByMemberId()로 해당 회원이 작성한 MenuReview 엔티티 목록을 데이터베이스에서 조회한다.
+- ReviewService가 조회된 MenuReview 엔티티 리스트를 GetMyMenuReviewsResponse DTO 리스트로 변환시킨다.
+- ReviewService가 완성된 DTO 리스트를 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 내가 쓴 메뉴 리뷰 목록 조회가 완료된다.
 
 ## 38) 내가 쓴 빵지순례 리뷰 보기
+![38_MyCourseReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/38-My-Course-Review-Show.jpg?rae=true)
+### 6번 메세지 수정
+- 사용자가 본인이 쓴 빵지순례 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- MemberController가 인증 정보(memId)를 받아 getMyCourseReviews() 메소드를 실행하여 ReviewService를 호출한다.
+- ReviewService는 getMyCourseReviews() 메소드를 실행한다.
+- 이 메소드는 CourseReviewRepository를 호출하여 findByMemberId()로 해당 회원이 작성한 CourseReview 엔티티 목록을 데이터베이스에서 조회한다.
+- ReviewService가 조회된 CourseReview 엔티티 리스트를 GetMyCourseReviewsResponse DTO 리스트로 변환시킨다.
+- ReivewService가 완성된 DTO 리스트를 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 내가 쓴 빵지순례 리뷰 보기가 완료된다.
 
-
-## 39) 내가 쓴 빵지순례 리뷰
-
+## 39) 내가 쓴 빵지순례 보기
+![39_MyCourseShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/39-My-Course-Show.jpg?raw=true)
+- 사용자가 본인이 만든 빵지순례를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
+- MemberController가 인증 정보(memId)를 받아 getMyCourses() 메소드를 실행하여 CourseService를 호출한다.
+- CourseService는 getMyCourses() 메소드를 실행한다.
+- 이 메소드는 CourseRepository를 호출하여 findByMemberId()로 해당 회원이 작성한 Course 엔티티 목록을 데이터베이스에서 조회한다.
+- CourseService가 조회된 Course 엔티티 리스트를 GetMyCoursesResponse DTO 리스트로 변환시킨다.
+- CourseService가 완성된 DTO 리스트를 MemberController에게 전달한다.
+- MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 내가 쓴 빵지순례 보기가 완료된다.
