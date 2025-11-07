@@ -50,13 +50,8 @@
 8. 사용자가 가게 관련 서비스를 종료하면 서비스는 이전 상태로 돌아간다.
 
 ### 상태 종료
-1. 사용자가 서비스 이용을 그만두면 시스템 상태가 종료된다.
+사용자가 서비스 이용을 그만두면 시스템 상태가 종료된다.
 
-
-- 사용자가 원하는 서비스에 접근하면 가게관련 서비스 제공의 대기 상태로 변경된다.</br>
-임시
-
-사용자가 서비스 이용을 종료하면 최종적으로 대기 상태가 종료된다.
 
 ## 5-3. Course State
 ![3-Course-State](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/state-machine/3-Course-State.jpg?raw=true)
@@ -83,10 +78,8 @@
 6. 시스템은 연관 가게 관련 서비스를 제공하는 상태에서 루트 관련 서비스를 제공하는 상태로 전환할 수 있다.
 
 ### 상태 종료
-1. 사용자가 서비스 이용을 그만두면 시스템 상태가 종료된다.
+사용자가 서비스 이용을 그만두면 시스템 상태가 종료된다.
 
-
-사용자가 서비스 이용을 종료하면 대기 상태가 종료된다.
 
 ## 5-e1. Create State
 ![e1-Create-State](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/state-machine/e1-Create-State.jpg?raw=true)
