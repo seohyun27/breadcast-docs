@@ -67,7 +67,8 @@
 
 ## 8) 가게 관심 추가하기(스크랩하기)
 ![8-FavoriteBakeryAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/08-Favorite-Bakery-Add.jpg?raw=true)
-
+### 이미지 오류(메세지 위치, 사용자 정보 접근 위치)
+### 다이어그램 오류
 - 사용자가 가게를 관심 목록에 추가할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(bakeryId)와 인증 정보(memId)를 받아 addFavoriteBakery() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 addFavoriteBakery() 메소드를 실행한다.
@@ -79,7 +80,7 @@
 
 ## 9) 가게 관심 삭제하기
 ![9-FavoriteBakeryDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/09-Favorite-Bakery-Delete.jpg?raw=true)
-
+### 로그인 정보 위치
 - 사용자가 가게를 관심 목록에서 삭제할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(bakeryId)와 인증 정보(memId)를 받아 deleteFavoriteBakery() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 deleteFavoriteBakery() 메소드를 실행한다.
@@ -296,7 +297,8 @@
 
 ## 25) 빵지순례 관심 추가하기
 ![25_FavoriteCourseAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/25-Favorite-Course-Add.jpg?raw=true)
-
+### 로그인 정보 위치
+### 존재여부 확인 수정
 - 사용자가 빵지순례를 관심 목록에 추가할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(courseId)와 인증 정보(memId)를 받아 addFavoriteCourse() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 addFavoriteCourse() 메소드를 실행한다.
@@ -308,7 +310,7 @@
 
 ## 26) 빵지순례 관심 삭제하기
 ![26_FavoriteCourseDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/26-Favorite-Course-Delete.jpg?raw-true)
-
+### 로그인 위치
 - 사용자가 빵지순례를 관심 목록에서 삭제할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(courseId)와 인증 정보(memId)를 받아 deleteCourseFavorite() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 deleteFavoriteCourse() 메소드를 실행한다.
@@ -410,7 +412,11 @@
 
 ## 33) 닉네임 변경하기
 ![33_ProfileChange](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/33-Profile-Change.jpg?raw=true)
-
+### 닉네임 변경으로 이름 바꾸기
+### 사용자 정보 획득
+### 순서 바꾸기
+### update -> update()
+### 갈아엎기
 - 사용자가 닉네임을 변경할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 ProfileRequest DTO와 인증 정보(memId)를 받아 updateNickname() 메소드를 실행하여 MemberService를 호출한다.
 - MemberService는 updateNickname() 메소드를 실행한다.
@@ -421,7 +427,7 @@
 - MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 닉네임 변경이 완료된다.
 
 ## 34) 관심 가게 목록 보기
-
+### 파일 이름 바꾸기
 ![34_FavoriteBakeriesShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/34-Favorite-Bakeries-Show.jpg)
 
 - 사용자가 관심 가게 목록을 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
@@ -456,7 +462,6 @@
 
 ## 37) 내가 쓴 메뉴 리뷰 보기
 ![37_MyMenuReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/37-My-Menu-Review-Show.jpg)
-
 - 사용자가 본인이 쓴 가게 메뉴 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 인증 정보(memId)를 받아 getMyMenuReviews() 메소드를 실행하여 ReviewService를 호출한다.
 - ReivewService는 getMyMenuReviews() 메소드를 실행한다.
@@ -467,7 +472,7 @@
 
 ## 38) 내가 쓴 빵지순례 리뷰 보기
 ![38_MyCourseReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/38-My-Course-Review-Show.jpg?rae=true)
-
+### 6번 메세지 수정
 - 사용자가 본인이 쓴 빵지순례 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 인증 정보(memId)를 받아 getMyCourseReviews() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 getMyCourseReviews() 메소드를 실행한다.
@@ -478,7 +483,6 @@
 
 ## 39) 내가 쓴 빵지순례 보기
 ![39_MyCourseShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/39-My-Course-Show.jpg?raw=true)
-
 - 사용자가 본인이 만든 빵지순례를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 인증 정보(memId)를 받아 getMyCourses() 메소드를 실행하여 CourseService를 호출한다.
 - CourseService는 getMyCourses() 메소드를 실행한다.
