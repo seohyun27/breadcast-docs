@@ -2,46 +2,37 @@
 
 ## 1) 회원 가입하기
 ![1_Signup](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/01-Signup.jpg?raw=true)
-
+###
 - 사용자가 회원가입을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - AuthController가 SignupRequest DTO를 받아 addMember() 메소드를 실행하여 MemberService를 호출한다.
 - MemberService는 addMember() 메소드를 실행한다.
-- 이 메소드는 먼저 validateInput() 메소드를 실행하여 유효한 회원가입 정보를 입력받았는지 확인하고, 결과에 따라 true 혹은 false를 반환한다.
-- 유효한 정보이면 passwordEncoder를 호출하여 비밀번호를 암호화한다.
-- createMember() 메소드를 통해 엔티티를 만든 후 MemberRepository의 save() 메소드를 호출하여 Member 엔티티를 데이터베이스에 저장한다.
-- Member 엔티티를 반환받은 MemberService가 MemberResponse DTO로 변환하여 AuthController에게 전달한다.
-- AuthController가 DTO를 포함한 최종 응답을 사용자에게 넘겨줌으로써 회원가입이 완료된다.
+- 이 메소드는 먼저 MemberRepository를 호출하여 existsByLoginId()와 existsByNickname()을 통해 아이디와 닉네임의 중복 여부를 확인한다.
+- 중복이 없으면 passwordEncoder로 비밀번호를 암호화한 뒤, save() 메소드를 호출하여 Member 엔티티를 데이터베이스에 저장한다.
+- MemberService가 저장된 Member 엔티티를 MemberResponse DTO로 변환하여 AuthController에게 전달한다.
+- 전달받은 정보를 AuthController가 최종적으로 사용자에게 넘겨줌으로써 회원가입이 완료된다.
 
 ## 2) 로그인하기
 ![2_Login](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/02-Login.jpg?raw=true)
-
+### 사진 틀림
 - 사용자가 로그인을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 사용자가 LoginRequest DTO로 로그인을 요청하면, AuthController가 이를 받아 authenticate() 메소드를 실행한다.
+- 사용자가 LoginRequest DTO로 로그인을 요청하면, JwtAuthenticationFilter가 이를 받아 attemptAuthentication() 메소드를 실행한다.
 - 이 메소드는 AuthenticationManager를 호출하여 실제 인증을 시도한다.
-- AuthenticationManager는 내부적으로 UserDetailsService(혹은 CustomAuthenticationProvider로 구현할 수 있음)를 호출하고, 이는 loadUserByUsername() 메소드를 통해 MemberRepository에서 findByLoginId()로 사용자를 조회한다.
-- 사용자 정보가 확인되고 passwordEncoder를 통해 비밀번호 일치를 확인하면, 인증된 Authentication 객체가 반환된다.
-- AuhenticationManager에게서 Authentication 객체를 반환받은 Authcontroller가 SecurityContextHolder를 호출하여 setContext() 메소드로 로그인 사용자 정보를 등록한다.
-- AuthController가 DTO를 포함한 최종 응답을 사용자에게 넘겨줌으로써 로그인이 완료된다.
+- AuthenticationManager는 내부적으로 UserDetailsService를 호출하고, 이는 loadUserByUsername() 메소드를 통해 MemberRepository에서 findByLoginId()로 사용자를 조회한다.
+- 사용자 정보가 확인되고 passwordEncoder를 통해 비밀번호가 일치하면, 인증된 Authentication 객체가 JwtAuthenticationFilter로 반환된다.
+- 필터는 successfulAuthentication() 메소드 내에서 JwtUtil을 호출하여, createToken()으로 Access Token과 Refresh Token을 생성한다.
+- 생성된 토큰 정보를 JwtAuthenticationFilter가 최종적으로 사용자에게 응답 헤더(또는 바디)에 담아 넘겨줌으로써 로그인이 완료된다.
 
 ## 3) 로그아웃하기
 ![3_Logout](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/03-Logout.jpg?raw=true)
 
-- 사용자가 로그아웃을 하는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 사용자가 로그아웃을 요청하면, SpringSecurityFilter가 이를 받아 logout()으로 SecurityContextLogoutHandler를 호출한다.
-- SpringSecurityFilter는 SecurityContextHolder를 clearContext() 메소드를 통해 호출하면, 사용자의 인증 정보가 현재 스레드에서 지워지고 로그아웃 처리된다.
-- AuthController가 최종 응답을 사용자에게 넘겨줌으로써 로그아웃이 완료된다.
 
 ## 4) 회원 탈퇴하기
 ![4_Withdraw](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/04-Withdraw.jpg?raw=true)
 
-- 사용자가 회원 탈퇴를 하는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 사용자가 회원 탈퇴를 요청하면, AuthController가 이를 받아 사용자 인증을 수행한다.
-- AuthController는 이렇게 획득한 사용자 id로 MemberService를 deleteMember()로 호출한다.
-- MemberService는 MemberRepository를 통해 deleteById()를 수행하여 사용자 정보를 삭제한다.
-- AuthController가 DTO를 포함한 최종 응답을 사용자에게 넘겨줌으로써 회원 탈퇴가 완료된다.
+- 사용자가 
 
 ## 5) 가게 검색하기
-![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/05-Bakery-Search.jpg?raw=true)
+![5_BakerySearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/5-Bakery-Search.jpg?raw=true)
 
 - 사용자가 가게 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - BakeryController가 DTO를 받아 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
@@ -52,7 +43,7 @@
 - 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 검색이 완료된다.
 
 ## 6) 가게 정렬하기
-![6_BakerySort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/06-Bakery-Sort.jpg?raw=true)
+![6_BakerySort](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/6-Bakery-Sort.jpg?raw=true)
 
 - 사용자가 가게 목록을 정렬을 할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - 요청을 받은 BakeryController는 정렬 기준 정보가 들어있는 DTO를 가지고 searchBakeries() 메소드를 실행하여 BakeryService를 호출한다.
@@ -63,7 +54,7 @@
 - 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 목록 정렬이 완료된다.
 
 ## 7) 가게 정보 보기
-![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/07-Bakery-Detail-Show.jpg?raw=true)
+![7_BakeryDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/7-Bakery-Detail-Show.jpg?raw=true)
 
 - 사용자가 원하는 가게의 자세한 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
 - BakeryController는 요청을 받아서 bakeryId, 사용자 정보를 가지고 getBakeryDetail() 메소드를 실행하여 BakeryService를 호출한다.
@@ -76,7 +67,8 @@
 
 ## 8) 가게 관심 추가하기(스크랩하기)
 ![8-FavoriteBakeryAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/08-Favorite-Bakery-Add.jpg?raw=true)
-
+### 이미지 오류(메세지 위치, 사용자 정보 접근 위치)
+### 다이어그램 오류
 - 사용자가 가게를 관심 목록에 추가할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(bakeryId)와 인증 정보(memId)를 받아 addFavoriteBakery() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 addFavoriteBakery() 메소드를 실행한다.
@@ -88,7 +80,7 @@
 
 ## 9) 가게 관심 삭제하기
 ![9-FavoriteBakeryDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/09-Favorite-Bakery-Delete.jpg?raw=true)
-
+### 로그인 정보 위치
 - 사용자가 가게를 관심 목록에서 삭제할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(bakeryId)와 인증 정보(memId)를 받아 deleteFavoriteBakery() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 deleteFavoriteBakery() 메소드를 실행한다.
@@ -163,8 +155,8 @@
 ## 15) 메뉴 리뷰 보기
 ![15_MenuDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/15-Menu-Detail-Show.jpg?raw=true)
 
-- 사용자가 가게 메뉴 리뷰 정보를 포함한 메뉴 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 MenuController는 menuId, 사용자 정보를 가지고 getMenuDetail() 메소드를 실행하여 MenuService를 호출한다.
+- 사용자가 가게 메뉴 상세 정보를 볼 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
+- 요청을 받은 MenuController는 menuId, UserDetailsImpl을 사용하여 가지고 getMenuDetail() 메소드를 실행하여 MenuService를 호출한다.
 - MenuService는 getMenuDetail() 메소드를 실행한다.
 - 이 메소드는 먼저 menuRepository.findById()를 호출해서 사용자가 원하는 Menu 엔티티를 데이터베이스에서 찾아낸다.
 - 만약 해당 메뉴가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
@@ -172,20 +164,22 @@
 - countByMenuId()를 호출하여 총 리뷰 수를 가져오고, 내부 메소드인 getAverageRating() 실행을 위해 findByMenuId()를 호출하여 모든 리뷰 데이터를 가져온 뒤 이를 활용하여 평균 별점을 계산한다.
 - 계산된 평균 별점과 리뷰 수, 그리고 메뉴의 기본 정보를 통합하여 GetMenuDetailResponse DTO를 구성한다.
 - MenuService는 이 DTO에 계산된 평균 별점과 리뷰 수를 직접 설정한다.
-- MenuService가 모든 정보가 반영된 GetMenuDetailResponse DTO를 MenuController에게 전달한다.
+- MenuService가 모든 정보가 반영된 GetMenuDetailResponse를 MenuController에게 전달한다.
 - 이렇게 전달받은 정보를 MenuController가 최종적으로 사용자에게 넘겨줌으로써 메뉴 상세 정보 조회가 완료된다.
 
 ## 16) 메뉴 리뷰 쓰기
 ![16_MenuReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/16-Menu-Review-Add.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 MenuController가 menuId, 사용자 정보, DTO를 가지고 addMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 MenuController가 menuId, UserDetailsImpl, AddMenuReviewRequest DTO를 가지고 addMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 addMenuReview() 메소드를 실행한다.
 - 이 메소드는 먼저 현재 로그인한 사용자의 작성 권한을 검증한다.
 - 만약 아니면 예외를 발생시켜 처리한다.
 - menuRepository.findById()를 호출하여 리뷰를 작성할 메뉴가 실제로 존재하는지 확인한다.
 - 만약 메뉴가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
-- 조건을 다 통과하면, ReviewService는 DTO의 내용을 포함하는 MenuReview 엔티티를 생성한다.
+- 그리고 나서 추가로 DTO 유효성도 검증한다.
+- 유효하지 않으면 예외를 발생시켜 적절하게 처리한다.
+- 조건을 다 통과하면, ReviewService는 memId, menuId, DTO의 내용을 포함하는 MenuReview 엔티티를 생성한다.
 - 생성된 엔티티는 menuReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
 - 저장이 완료된 후, ReviewService는 저장된 MenuReview 엔티티 정보를 MenuReviewResponse DTO로 변환시키며, 이 DTO를 MenuController에게 전달한다.
 - 이렇게 받은 최종 응답을 MenuController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 메뉴 리뷰 작성이 성공적으로 완료된다.
@@ -194,12 +188,12 @@
 ![17_MenuReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/17-Menu-Review-Update.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다..
-- 요청을 받은 MenuController는 reviewId, 사용자 정보, DTO를 가지고 updateMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 MenuController는 reviewId, UserDetailsImpl, UpdateMenuReviewRequest DTO를 가지고 updateMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 updateMenuReview() 메소드를 실행한다.
 - 이 메소드는 먼저 menuReviewRepository.findById()를 호출해서 수정할 리뷰 엔티티를 데이터베이스에서 찾아낸다.
 - 만약 해당 리뷰 ID가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 리뷰 엔티티를 찾은 뒤, ReviewService는 수정 권한을 검증한다.
-- 수정 권한이 없으면 예외를 발생시켜 처리한다.
+- 수정 권한 일치하지 않으면 예외를 발생시켜 처리한다.
 - UpdateMenuReviewRequest의 유효성도 검증한다.
 - 검증이 완료되면, 조회된 리뷰 엔티티에 MenuReview.update() 메소드를 호출하여 DTO의 새로운 내용(별점, 내용)을 반영한다.
 - 수정이 완료된 후, ReviewService는 수정된 MenuReview 엔티티 정보를 MenuReviewResponse DTO로 변환시키며, 이 DTO를 MenuController에게 전달한다.
@@ -209,12 +203,12 @@
 ![18_MenuReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/18-Menu-Review-Delete.jpg?raw=true)
 
 - 사용자가 가게 메뉴 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 MenuController는 reviewId, 사용자 정보를 가지고 deleteMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 MenuController는 reviewId, UserDetailsImpl를 가지고 deleteMenuReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 deleteMenuReview() 메소드를 실행한다.
 - 이 메소드는 먼저 menuReviewRepository.findById()를 호출해서 삭제할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
 - 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 리뷰 엔티티를 찾은 뒤, ReviewService는 삭제 권한을 검증한다.
-- 권한이 없으면 예외를 발생시켜 처리한다.
+- 권한이 일치하지 않으면 예외를 발생시켜 처리한다.
 - 권한 확인이 끝나면 menuReviewRepository.deleteById()를 호출하여 데이터베이스에서 메뉴 리뷰를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReviewService는 void를 반환하며 MenuController에게 성공을 알린다.
 - 이렇게 전달받은 성공 응답을 MenuController가 ResponseEntity<Void>로 최종적으로 사용자에게 넘겨줌으로써 메뉴 리뷰 삭제가 완료된다.
@@ -223,22 +217,22 @@
 ![19_ReportShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/19-Report-Show.jpg?raw=true)
 
 - 사용자가 제보글을 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 ReportController는 bakeryId, 사용자 정보를 사용하여 getReports() 메소드를 실행하여 ReportService를 호출한다.
+- 요청을 받은 ReportController는 bakeryId, UserDetailsImpl을 사용하여 getReports() 메소드를 실행하여 ReportService를 호출한다.
 - ReportService는 getReports() 메소드를 실행한다.
 - 이 메소드는 bakeryReportRepository.findByBakeryIdOrderByCreatedAtDesc()를 호출하여 해당 bakeryId에 종속된 BakeryReport 엔티티 목록을 최신순으로 정렬하여 데이터베이스에서 찾아낸다.
 - BakeryReport 엔티티 리스트를 찾아낸 뒤, ReportService는 이 리스트를 순회하며 추가 정보를 포함시킨다.
 - 모든 정보가 반영되면, ReportService는 BakeryReport 엔티티 리스트를 ReportsResponse DTO 리스트로 변환시킨다.
 - 그러고 나서 ReportService가 완성된 ReportsResponse 리스트를 ReportController에게 전달한다.
-- 이렇게 전달받은 정보를 ReportController가 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 보기가 완료된다.
+- 이렇게 전달받은 정보를 ReportController가 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 목록 조회가 완료된다.
 
 ## 20) 제보하기
 ![20_ReportAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/20-Report-Add.jpg?raw=true)
 
 - 사용자가 제보글을 쓸 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 ReportController는 bakeryId, 사용자 정보, DTO를 가지고 addReport() 메소드를 실행하여 ReportService를 호출한다.
+- 요청을 받은 ReportController는 bakeryId, UserDetailsImpl, AddReportRequest DTO를 가지고 addReport() 메소드를 실행하여 ReportService를 호출한다.
 - ReportService는 addReport() 메소드를 실행한다.
 - 이 메소드는 먼저 사용자가 쓰기 권한이 있는지 검증한다.
-- 권한이 없으면 예외를 발생시킨다.
+- 권한이 일치하지 않으면 예외를 발생시킨다.
 - 그리고 나서 제보글에 필요한 필수 정보가 올바른지 확인하는 유효성 검증을 수행한다.
 - 이 검증이 완료되면, ReportService는 memId, bakeryId, DTO의 내용을 포함하는 BakeryReport 엔티티를 생성한다.
 - 생성된 엔티티는 bakeryReportRepository.save()를 호출하여 데이터베이스에 저장된다.
@@ -249,12 +243,12 @@
 ![21_ReportDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/21-Report-Delete.jpg?raw=true)
 
 - 사용자가 제보글을 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 ReportController는 reportId와 사용자 정보를 가지고 deleteBakeryReport() 메소드를 실행하여 ReportService를 호출한다.
+- 요청을 받은 ReportController는 reportId와 UserDetailsImpl를 가지고 deleteBakeryReport() 메소드를 실행하여 ReportService를 호출한다.
 - ReportService는 deleteBakeryReport() 메소드를 실행한다.
 - 이 메소드는 먼저 bakeryReportRepository.findById를 호출해서 삭제할 제보 엔티티가 데이터베이스에 존재하는지 확인한다.
 - 만약 해당 제보글이 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 제보 엔티티를 찾은 뒤, ReportService는 삭제 권한을 검증한다.
-- 권한이 없으면 예외를 발생시킨다.
+- 권한이 일치하지 않으면 예외를 발생시킨다.
 - 권한 확인이 끝나면 bakeryReportRepository.deleteById()를 호출하여 데이터베이스에서 해당 제보를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReportService는 void를 반환하며 ReportController에게 성공을 알린다.
 - 이렇게 전달받은 성공 응답을 ReportController가 ResponseEntity 상태로 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 삭제가 완료된다.
@@ -276,7 +270,7 @@
 ![23_CourseSearch](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/23-Course-Search.jpg?raw=true)
 
 - 사용자가 빵지순례 글을 검색할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 CourseController는 DTO를 가지고 searchCourses() 메소드를 실행하여 CourseService를 호출한다.
+- 요청을 받은 CourseController는 SearchCourseRequest DTO를 가지고 searchCourses() 메소드를 실행하여 CourseService를 호출한다.
 - CourseService는 searchCourses() 메소드를 실행한다
 - 이 메소드는 courseRepository.findByTitleContainingOrKeywordContaining()를 호출하여 사용자가 입력한 키워드를 기반으로 여기에 맞는 Course 엔티티 목록을 데이터베이스에서 찾아낸다.
 - 검색된 Course 엔티티 목록을 찾아낸 뒤, CourseService는 이 목록을 순회하며 각 코스에 대한 추가 정보를 계산한다.
@@ -289,7 +283,7 @@
 ![24_CourseDetailShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/24-Course-Detail-Show.jpg?raw=true)
 
 - 사용자가 빵지순례 글 상세 정보를 조회할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 이 요청을 받은 CourseController는 courseId와 사용자 정보를 가지고 getCourseDetail() 메소드를 실행하여 CourseService를 호출한다.
+- 이 요청을 받은 CourseController는 courseId와 UserDetailsImpl를 가지고 getCourseDetail() 메소드를 실행하여 CourseService를 호출한다.
 - CourseService는 getCourseDetail() 메소드를 실행한다.
 - 이 메소드는 코스 상세 정보 조회를 위해 여러 리포지토리에서 데이터를 가져와 하나의 객체로 통합한다.
 - 먼저 courseRepository.findById()를 호출하여 코스의 기본 정보를 가져온다.
@@ -303,7 +297,8 @@
 
 ## 25) 빵지순례 관심 추가하기
 ![25_FavoriteCourseAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/25-Favorite-Course-Add.jpg?raw=true)
-
+### 로그인 정보 위치
+### 존재여부 확인 수정
 - 사용자가 빵지순례를 관심 목록에 추가할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(courseId)와 인증 정보(memId)를 받아 addFavoriteCourse() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 addFavoriteCourse() 메소드를 실행한다.
@@ -315,7 +310,7 @@
 
 ## 26) 빵지순례 관심 삭제하기
 ![26_FavoriteCourseDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/26-Favorite-Course-Delete.jpg?raw-true)
-
+### 로그인 위치
 - 사용자가 빵지순례를 관심 목록에서 삭제할 수 있는 Use Case를 sequence diagram으로 나타낸 것이다.
 - FavoriteController가 경로 변수(courseId)와 인증 정보(memId)를 받아 deleteCourseFavorite() 메소드를 실행하여 FavoriteService를 호출한다.
 - FavoriteService는 deleteFavoriteCourse() 메소드를 실행한다.
@@ -327,10 +322,10 @@
 ![27_CourseReviewAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/27-Course-Review-Add.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 달 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 CourseController는 courseId, 사용자 정보, DTO를 가지고 addCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 CourseController는 courseId, UserDetailsImpl, CourseReviewRequest DTO를 가지고 addCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 addCourseReview(Long courseId, Long memId, CourseReviewRequest request) 메소드를 실행한다.
 - 이 메소드는 먼저 courseRepository.findById()를 호출하여 리뷰를 작성할 코스가 실제로 존재하는지 확인한다.
-- 만약 코스가 없으면 예외를 발생시켜 중단한다. 코스의 존재가 확인되면, 그 다음으로 사용자의 권한을 확인한다.
+- 만약 코스가 존재하지 않으면 예외를 발생시켜 중단한다. 코스의 존재가 확인되면, 그 다음으로 사용자의 권한을 확인한다.
 - 권한이 없으면 예외를 발생시킨다.
 - 권한이 존재한다면 ReviewService는 DTO의 내용을 포함하는 CourseReview 엔티티를 생성한다.
 - 생성된 엔티티는 courseReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
@@ -341,7 +336,7 @@
 ![28_CourseReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/28-Course-Review-Update.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 수정할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 요청을 받은 CourseController는 courseReviewId, 사용자 정보, 그리고 DTO를 가지고 updateCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
+- 요청을 받은 CourseController는 @PathVariable에서 courseReviewId, UserDetailsImpl, 그리고 CourseReviewRequest DTO를 가지고 updateCourseReview() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 updateCourseReview() 메소드를 실행한다.
 - 이 메소드는 먼저 courseReviewRepository.findById()를 호출해서 수정할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
 - 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
@@ -355,10 +350,10 @@
 ![29_CourseReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/29-Course-Review-Delete.jpg?raw=true)
 
 - 사용자가 빵지순례 글에 리뷰를 삭제할 수 있게 해주는 Use Case를 sequence diagram으로 나타낸 것이다.
-- 이 요청을 받은 CourseController는 courseReviewId, 사용자 정보를 이용하여 deleteCourseReview() 메소드를 실행하여서 ReviewService를 호출한다.
+- 이 요청을 받은 CourseController는 courseReviewId, UserDetailsImpl을 이용하여 deleteCourseReview() 메소드를 실행하여서 ReviewService를 호출한다.
 - ReviewService는 deleteCourseReview() 메소드를 실행한다.
 - 이 메소드는 먼저 courseReviewRepository.findById()를 호출해서 삭제할 리뷰 엔티티가 데이터베이스에 존재하는지 확인한다.
-- 만약 해당 리뷰가 없으면 적절한 예외를 발생시켜 처리를 중단한다.
+- 만약 해당 리뷰가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
 - 리뷰 엔티티를 찾은 뒤, ReviewService는 조회된 리뷰 엔티티의 삭제 권한이 사용자에게 있는지 확인하여 삭제 권한을 검증하는 중요한 역할을 수행한다.
 - 만약 권한이 없으면 삭제를 진행하지 않고 예외를 발생시킨다.
 - 권한 확인이 완료되면, courseReviewRepository.deleteById()를 호출하여 데이터베이스에서 해당 리뷰를 삭제한다.
@@ -417,7 +412,11 @@
 
 ## 33) 닉네임 변경하기
 ![33_ProfileChange](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/33-Profile-Change.jpg?raw=true)
-
+### 닉네임 변경으로 이름 바꾸기
+### 사용자 정보 획득
+### 순서 바꾸기
+### update -> update()
+### 갈아엎기
 - 사용자가 닉네임을 변경할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 ProfileRequest DTO와 인증 정보(memId)를 받아 updateNickname() 메소드를 실행하여 MemberService를 호출한다.
 - MemberService는 updateNickname() 메소드를 실행한다.
@@ -428,7 +427,7 @@
 - MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 닉네임 변경이 완료된다.
 
 ## 34) 관심 가게 목록 보기
-
+### 파일 이름 바꾸기
 ![34_FavoriteBakeriesShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/34-Favorite-Bakeries-Show.jpg)
 
 - 사용자가 관심 가게 목록을 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
@@ -463,7 +462,6 @@
 
 ## 37) 내가 쓴 메뉴 리뷰 보기
 ![37_MyMenuReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/37-My-Menu-Review-Show.jpg)
-
 - 사용자가 본인이 쓴 가게 메뉴 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 인증 정보(memId)를 받아 getMyMenuReviews() 메소드를 실행하여 ReviewService를 호출한다.
 - ReivewService는 getMyMenuReviews() 메소드를 실행한다.
@@ -474,7 +472,7 @@
 
 ## 38) 내가 쓴 빵지순례 리뷰 보기
 ![38_MyCourseReviewShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/38-My-Course-Review-Show.jpg?rae=true)
-
+### 6번 메세지 수정
 - 사용자가 본인이 쓴 빵지순례 리뷰를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 인증 정보(memId)를 받아 getMyCourseReviews() 메소드를 실행하여 ReviewService를 호출한다.
 - ReviewService는 getMyCourseReviews() 메소드를 실행한다.
@@ -485,7 +483,6 @@
 
 ## 39) 내가 쓴 빵지순례 보기
 ![39_MyCourseShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/39-My-Course-Show.jpg?raw=true)
-
 - 사용자가 본인이 만든 빵지순례를 확인할 수 있게 하는 Use Case를 sequence diagram으로 나타낸 것이다.
 - MemberController가 인증 정보(memId)를 받아 getMyCourses() 메소드를 실행하여 CourseService를 호출한다.
 - CourseService는 getMyCourses() 메소드를 실행한다.
