@@ -1,9 +1,14 @@
 # 브랜치 규칙
-- feat/~~ : 새 기능 추가
-- fix/~~ : 오류 수정
-- hotfix/~~ : 급한 오류 수정
-- docs/~~ : 문서
-- ex) feat/add_bakery_favorite
+| 브랜치 이름  | 설명                   |
+|:--------|:---------------------|
+| feat/   | 새 기능 추가              |
+| fix/    | 기존 오류 수정             |
+| hotfix/ | 치명적인 오류 수정           |
+| docs/   | 문서 수정                |
+| style/   | 코드 포맷팅, 불필요 주석 제거    |
+| refactor/   | UserService 메서드 분리 등 |
+
+ex) feat/add_bakery_favorite : 베이커리 좋아요 관련 기능을 추가하는 브랜치
 
 ---
 
