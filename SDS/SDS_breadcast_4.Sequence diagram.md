@@ -70,7 +70,8 @@
 - BakeryService는 getBakeryDetail() 메소드를 실행한다.
 - 이 메소드는 bakeryRepository에 있는 findById()를 호출해서 사용자가 원하는 가게의 데이터를 데이터베이스에서 찾아낸다.
 - 만약 해당 가게가 존재하지 않으면 적절한 예외를 발생시켜 처리를 중단한다.
-- 데이터를 찾아낸 뒤, BakeryService는 조회한 Bakery 엔티티를 BakeryDetailResponse DTO로 변환시킨다.
+- 데이터를 찾아낸 뒤, 찾은 Bakery 엔티티를 기반으로 추가 정보를 구한다.
+- BakeryService는 조회한 Bakery 엔티티와 추가 정보를 BakeryDetailResponse DTO로 변환시킨다.
 - 그런 뒤 BakeryService가 완성된 BakeryDetailResponse를 BakeryController에게 전달한다.
 - 이렇게 전달받은 정보를 BakeryController가 최종적으로 사용자에게 넘겨줌으로써 가게 정보 조회가 완료된다.
 
