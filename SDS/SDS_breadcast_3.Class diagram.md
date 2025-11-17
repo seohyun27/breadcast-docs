@@ -1455,15 +1455,12 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 | 기능                | HTTP Method | API 경로                           |
 |:------------------| :--- |:---------------------------------|
-| 내 프로필 조회          | `GET` | `/api/members/me`                |
-| 프로필 수정            | `PATCH` | `/api/members/me`                |
+| 프로필 수정하기            | `PATCH` | `/api/members/me`                |
 | 회원 탈퇴하기           | `DELETE` | `/api/members/me`                |
 | 내가 작성한 루트 보기      | `GET` | `/api/members/me/courses`        |
 | 내가 작성한 빵집 리뷰 보기   | `GET` | `/api/members/me/bakery-reviews` |
 | 내가 작성한 메뉴 리뷰 보기   | `GET` | `/api/members/me/menu-reviews`   |
 | 내가 작성한 빵지순례 리뷰 보기 | `GET` | `/api/members/me/course-reviews` |
-| 가게 관심 목록 보기       | `GET` | `/api/members/me/favorites/bakeries`      | 
-| 루트 관심 목록 보기       | `GET` | `/api/members/me/favorites/courses`      | 
 
 
 ---
@@ -1533,8 +1530,10 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 | 기능 | HTTP Method | API 경로 |
 | :--- | :--- | :--- |
+| 관심 가게 목록 보기       | `GET` | `/api/members/me/favorites/bakeries`      | 
 | 관심 가게 추가하기 | `POST` | `/api/members/me/favorites/bakeries/{bakeryId}` | 
 | 관심 가게 삭제하기 | `DELETE` | `/api/members/me/favorites/bakeries/{bakeryId}` | 
+| 관심 루트 목록 보기       | `GET` | `/api/members/me/favorites/courses`      | 
 | 관심 루트 추가하기 | `POST` | `/api/members/me/favorites/courses/{courseId}` | 
 | 관심 루트 삭제하기 | `DELETE` | `/api/members/me/favorites/courses/{courseId}` | 
 
