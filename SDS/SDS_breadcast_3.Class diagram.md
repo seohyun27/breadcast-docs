@@ -1474,8 +1474,9 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 | 기능         | HTTP Method | API 경로 | 추가 정보                              |
 |:-----------| :--- | :--- |:-----------------------------------|
-| 가게 검색하기    | `GET` | `/api/bakeries` | `?keyword=`와 `?sort=`로 검색 및 정렬을 지원 |
+| 가게 검색하기    | `GET` | `/api/bakeries` | `?keyword=`와 `?sort=`로 검색 및 정렬을 지원. sort=popular일 때 인기순 정렬, sort=review일 때 리뷰순 정렬 |
 | 가게 정보 보기   | `GET` | `/api/bakeries/{bakeryId}` |                                    |
+| 가게 리뷰 보기   | `GET` | `/api/bakeries/{bakeryId}/bakery-reviews` |                                    |
 | 가게 리뷰 쓰기   | `POST` | `/api/bakeries/{bakeryId}/bakery-reviews` |                                    |
 | 가게 리뷰 수정하기 | `PATCH` | `/api/bakery-reviews/{reviewId}` | 리뷰 ID는 가게 ID와 무관하게 독립적으로 존재        |
 | 가게 리뷰 삭제하기 | `DELETE` | `/api/bakery-reviews/{reviewId}` |                                    |
