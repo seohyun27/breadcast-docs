@@ -1489,8 +1489,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | 가게 메뉴 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/menus`   |
 | 메뉴 세부 정보 보기 | `GET` | `/api/menus/{menuId}`              | 
 | 메뉴 리뷰 쓰기 | `POST` | `/api/menus/{menuId}/menu-reviews` | 
-| 메뉴 리뷰 수정하기 | `PATCH` | `/api/menu-reviews/{reviewId}`     | 
-| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/menu-reviews/{reviewId}`     | 
+| 메뉴 리뷰 수정하기 | `PATCH` | `/api/menu-reviews/{menuReviewId}`     | 
+| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/menu-reviews/{menuReviewId}`     | 
 
 ---
 
@@ -1502,8 +1502,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | :--- | :--- |:--------------------------|
 | 제보 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/reports` |
 | 제보하기 | `POST` | `/api/bakeries/{bakeryId}/reports`            |
-| 제보 수정하기 | `PATCH` | `/api/reports/{reportId}` |
-| 제보 삭제하기 | `DELETE` | `/api/reports/{reportId}` |
+| 제보 삭제하기 | `DELETE` | `/api/reports/{bakeryReportId}` |
 
 ---
 
@@ -1513,14 +1512,15 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 | 기능 | HTTP Method | API 경로 | 추가 정보                                    |
 | :--- | :--- | :--- |:-----------------------------------------|
-| 루트 검색/목록 보기 | `GET` | `/api/courses` | `?keyword=`로 검색을 지원                      |
+| 루트 목록 보기 | `GET` | `/api/courses/popular` |                |
+| 루트 검색하기 | `GET` | `/api/courses` | `?keyword=`로 검색을 지원                      |
 | 루트 세부 글 보기 | `GET` | `/api/courses/{courseId}` |                                          |
 | 루트 작성하기 | `POST` | `/api/courses` |                                          |
 | 루트 수정하기 | `PATCH` | `/api/courses/{courseId}` |                                          |
 | 루트 삭제하기 | `DELETE` | `/api/courses/{courseId}` |                                          |
 | 루트 리뷰 쓰기 | `POST` | `/api/courses/{courseId}/course-reviews` |                                          |
-| 루트 리뷰 수정하기 | `PATCH` | `/api/course-reviews/{reviewId}` |                                          |
-| 루트 리뷰 삭제하기 | `DELETE` | `/api/course-reviews/{reviewId}` |                                          |
+| 루트 리뷰 수정하기 | `PATCH` | `/api/course-reviews/{courseReviewId}` |                                          |
+| 루트 리뷰 삭제하기 | `DELETE` | `/api/course-reviews/{courseReviewId}` |                                          |
 
 ---
 
