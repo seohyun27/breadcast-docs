@@ -266,10 +266,10 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | bakeryRepository | BakeryRepository | private | 빵집 엔티티의 DB 작업을 위한 리포지토리 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description                  |
-| :--- | :--- | :--- |:-----------------------------|
-| getBakeryDetail | Long bakeryId, Long memId | BakeryDetailResponse | 특정 빵집의 상세 정보를 조회하여 반환        |
-| searchBakeries | SearchBakeryRequest request | `List<SearchBakeryResponse>` | 검색 조건(제목)에 맞는 빵집 목록을 검색하여 반환 |
+| Name | Argument                    | Returns | Description                  |
+| :--- |:----------------------------| :--- |:-----------------------------|
+| getBakeryDetail | Long bakeryId, Long memId   | BakeryDetailResponse | 특정 빵집의 상세 정보를 조회하여 반환        |
+| searchBakeries | String keyword, String sort | `List<SearchBakeryResponse>` | 검색 조건(제목)에 맞는 빵집 목록을 검색하여 반환 |
 
 ---
 
@@ -309,7 +309,7 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | addBakeryReview | Long bakeryId, UserDetailsImpl userDetails, BakeryReviewRequest request | `ResponseEntity<BakeryReviewResponse>` | 특정 빵집에 대한 리뷰 작성 요청을 처리 |
 | updateBakeryReview | Long bakeryReviewId, UserDetailsImpl userDetails, BakeryReviewRequest request | `ResponseEntity<BakeryReviewResponse>` | 특정 빵집 리뷰의 수정 요청을 처리 |
 | bakeryReviewDelete | Long bakeryReviewId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 빵집 리뷰의 삭제 요청을 처리 |
-| searchBakeries | SearchBakeryRequest request | `List<SearchBakeryResponse>` | 빵집 검색 요청을 처리 |
+| searchBakeries | String keyword, String sort | `List<SearchBakeryResponse>` | 빵집 검색 요청을 처리 |
 
 ---
 
@@ -562,7 +562,7 @@ CoursePart 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토�
 | updateCourse | Long courseId, Long memId, CourseRequest request | CourseResponse | 특정 코스의 정보를 수정하고 CoursePartService로 CoursePart 수정을 위임 |
 | deleteCourse | Long courseId, Long memId | void | 특정 코스와 관련된 모든 데이터(코스 파트, 코스 리뷰)를 함께 삭제               |
 | getPopularCourses | | `List<GetSimpleCoursesResponse>` | 좋아요 수를 기준으로 인기 코스 목록을 조회                             |
-| searchCourses | SearchCourseRequest request | `List<GetSimpleCoursesResponse>` | 키워드를 기반으로 코스 목록을 검색                                  |
+| searchCourses | String keyword | `List<GetSimpleCoursesResponse>` | 키워드를 기반으로 코스 목록을 검색                                  |
 | getCourseDetail | Long courseId, Long memId | CourseDetailResponse | 특정 코스의 상세 정보를 조회                                     |
 | getMyCourse | Long memId | `List<Course>` | 특정 회원이 생성한 코스 목록을 조회                                 |
 
@@ -604,7 +604,7 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 | updateCourse | Long courseId, UserDetailsImpl userDetails, CourseRequest request | `ResponseEntity<CourseResponse>` | 특정 코스를 수정하는 요청을 처리 |
 | deleteCourse | Long courseId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 코스를 삭제하는 요청을 처리 |
 | getPopularCourses | | `List<GetSimpleCoursesResponse>` | 인기 코스 목록을 조회하는 요청을 처리 |
-| searchCourses | SearchCourseRequest request | `List<GetSimpleCoursesResponse>` | 코스를 검색하는 요청을 처리 |
+| searchCourses | String keyword | `List<GetSimpleCoursesResponse>` | 코스를 검색하는 요청을 처리 |
 | getCourseDetail | Long courseId, UserDetailsImpl userDetails | CourseDetailResponse | 특정 코스의 상세 정보를 조회하는 요청을 처리 |
 
 ---
@@ -999,18 +999,6 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 ---
 
-### SearchBakeryRequest
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- |:-----------|:------------|
-| text | String | private | 검색어 |
-
-#### 2. Usage
-- 가게 검색 및 정렬하기
-
----
-
 ### SearchBakeryResponse
 
 #### 1. Attributes
@@ -1278,18 +1266,6 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 ---
 
-### SearchCourseRequest
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- |:-----------|:------------|
-| title | String | private | 찾으려는 검색어 |
-
-#### 2. Usage
-- 빵지순례 검색하기
-
----
-
 ### GetSimpleCoursesResponse
 
 #### 1. Attributes
@@ -1460,8 +1436,10 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 ### 1. AuthController
 
-인증 API <br>
-로그인과 로그아웃 시 서버의 상태를 변경하여야 하므로 POST 메소드를 사용한다. 또한 로그인 시 사용자의 아이디와 비밀번호를를 body에 담아 보내야 하므로 POST 메소드를 사용한다.
+인증 API
+
+- 로그인과 로그아웃 시 서버의 상태를 변경하여야 하므로 POST 메소드를 사용
+- 로그인 시 사용자의 아이디와 비밀번호를를 body에 담아 보내야 하므로 POST 메소드를 사용
 
 | 기능 | HTTP Method | API 경로         |
 | :--- | :--- |:---------------|
@@ -1475,16 +1453,18 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 사용자 정보 및 마이페이지 API
 
-| 기능                | HTTP Method | API 경로                                    |
-|:------------------| :--- |:------------------------------------------|
-| 내 프로필 조회          | `GET` | `/api/members/me`                         |
-| 프로필 수정            | `PATCH` | `/api/members/me`                         |
-| 회원 탈퇴하기           | `DELETE` | `/api/members/me`                         |
-| 내가 작성한 루트 보기      | `GET` | `/api/members/me/courses`                 |
-| 내가 작성한 빵집 리뷰 보기   | `GET` | `/api/members/me/reviews?category=BAKERY` |
-| 내가 작성한 메뉴 리뷰 보기   | `GET` | `/api/members/me/reviews?category=MENU`   |
-| 내가 작성한 빵지순례 리뷰 보기 | `GET` | `/api/members/me/reviews?category=COURSE` |
-| 관심 목록 보기          | `GET` | `/api/members/me/favorites`               |
+| 기능                | HTTP Method | API 경로                           |
+|:------------------| :--- |:---------------------------------|
+| 내 프로필 조회          | `GET` | `/api/members/me`                |
+| 프로필 수정            | `PATCH` | `/api/members/me`                |
+| 회원 탈퇴하기           | `DELETE` | `/api/members/me`                |
+| 내가 작성한 루트 보기      | `GET` | `/api/members/me/courses`        |
+| 내가 작성한 빵집 리뷰 보기   | `GET` | `/api/members/me/bakery-reviews` |
+| 내가 작성한 메뉴 리뷰 보기   | `GET` | `/api/members/me/menu-reviews`   |
+| 내가 작성한 빵지순례 리뷰 보기 | `GET` | `/api/members/me/course-reviews` |
+| 가게 관심 목록 보기       | `GET` | `/api/members/me/favorites/bakeries`      | 
+| 루트 관심 목록 보기       | `GET` | `/api/members/me/favorites/courses`      | 
+
 
 ---
 
@@ -1492,13 +1472,13 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 빵집 및 빵집 리뷰 API
 
-| 기능         | HTTP Method | API 경로 | 추가 정보                                        |
-|:-----------| :--- | :--- |:---------------------------------------------|
-| 가게 검색/정렬하기 | `GET` | `/api/bakeries` | `?name=` 또는 `?sort=` 같은 쿼리 스트링으로 검색 및 정렬을 지원 |
-| 가게 정보 보기   | `GET` | `/api/bakeries/{bakeryId}` |                                         |
-| 가게 리뷰 쓰기   | `POST` | `/api/bakeries/{bakeryId}/reviews` |                      |
-| 가게 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` |                           |
-| 가게 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` |                           |
+| 기능         | HTTP Method | API 경로 | 추가 정보                              |
+|:-----------| :--- | :--- |:-----------------------------------|
+| 가게 검색하기    | `GET` | `/api/bakeries` | `?keyword=`와 `?sort=`로 검색 및 정렬을 지원 |
+| 가게 정보 보기   | `GET` | `/api/bakeries/{bakeryId}` |                                    |
+| 가게 리뷰 쓰기   | `POST` | `/api/bakeries/{bakeryId}/bakery-reviews` |                                    |
+| 가게 리뷰 수정하기 | `PATCH` | `/api/bakery-reviews/{reviewId}` | 리뷰 ID는 가게 ID와 무관하게 독립적으로 존재        |
+| 가게 리뷰 삭제하기 | `DELETE` | `/api/bakery-reviews/{reviewId}` |                                    |
 
 ---
 
@@ -1506,13 +1486,13 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 메뉴 및 메뉴 리뷰 API
 
-| 기능 | HTTP Method | API 경로 | 
-| :--- | :--- | :--- | 
-| 가게 메뉴 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/menus` |
-| 메뉴 세부 정보 보기 | `GET` | `/api/bakeries/{bakeryId}/menus/{menuId}` | 
-| 메뉴 리뷰 쓰기 | `POST` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews` | 
-| 메뉴 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}` | 
-| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}` | 
+| 기능 | HTTP Method | API 경로                             | 
+| :--- | :--- |:-----------------------------------| 
+| 가게 메뉴 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/menus`   |
+| 메뉴 세부 정보 보기 | `GET` | `/api/menus/{menuId}`              | 
+| 메뉴 리뷰 쓰기 | `POST` | `/api/menus/{menuId}/menu-reviews` | 
+| 메뉴 리뷰 수정하기 | `PATCH` | `/api/menu-reviews/{reviewId}`     | 
+| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/menu-reviews/{reviewId}`     | 
 
 ---
 
@@ -1524,8 +1504,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | :--- | :--- |:--------------------------|
 | 제보 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/reports` |
 | 제보하기 | `POST` | `/api/bakeries/{bakeryId}/reports`            |
-| 제보 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reports/{reportId}` |
-| 제보 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reports/{reportId}` |
+| 제보 수정하기 | `PATCH` | `/api/reports/{reportId}` |
+| 제보 삭제하기 | `DELETE` | `/api/reports/{reportId}` |
 
 ---
 
@@ -1533,16 +1513,16 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 빵지순례글 및 빵지순례 리뷰 API
 
-| 기능 | HTTP Method | API 경로 | 추가 정보                                          |
-| :--- | :--- | :--- |:-----------------------------------------------|
-| 루트 검색/목록 보기 | `GET` | `/api/courses` | `?keyword=` 또는 `?sort=popular` 등으로 검색 및 정렬을 지원 |
-| 루트 세부 글 보기 | `GET` | `/api/courses/{courseId}` |                                                |
-| 루트 작성하기 | `POST` | `/api/courses` |                                                |
-| 루트 수정하기 | `PATCH` | `/api/courses/{courseId}` |                                                |
-| 루트 삭제하기 | `DELETE` | `/api/courses/{courseId}` |                                                |
-| 루트 리뷰 쓰기 | `POST` | `/api/courses/{courseId}/reviews` |                                                |
-| 루트 리뷰 수정하기 | `PATCH` | `/api/courses/{courseId}/reviews/{reviewId}` |                                                |
-| 루트 리뷰 삭제하기 | `DELETE` | `/api/courses/{courseId}/reviews/{reviewId}` |                                                |
+| 기능 | HTTP Method | API 경로 | 추가 정보                                    |
+| :--- | :--- | :--- |:-----------------------------------------|
+| 루트 검색/목록 보기 | `GET` | `/api/courses` | `?keyword=`로 검색을 지원                      |
+| 루트 세부 글 보기 | `GET` | `/api/courses/{courseId}` |                                          |
+| 루트 작성하기 | `POST` | `/api/courses` |                                          |
+| 루트 수정하기 | `PATCH` | `/api/courses/{courseId}` |                                          |
+| 루트 삭제하기 | `DELETE` | `/api/courses/{courseId}` |                                          |
+| 루트 리뷰 쓰기 | `POST` | `/api/courses/{courseId}/course-reviews` |                                          |
+| 루트 리뷰 수정하기 | `PATCH` | `/api/course-reviews/{reviewId}` |                                          |
+| 루트 리뷰 삭제하기 | `DELETE` | `/api/course-reviews/{reviewId}` |                                          |
 
 ---
 
@@ -1552,10 +1532,10 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 | 기능 | HTTP Method | API 경로 |
 | :--- | :--- | :--- |
-| 관심 가게 추가하기 | `POST` | `/api/favorites/bakeries/{bakeryId}` | 
-| 관심 가게 삭제하기 | `DELETE` | `/api/favorites/bakeries/{bakeryId}` | 
-| 관심 루트 추가하기 | `POST` | `/api/favorites/courses/{courseId}` | 
-| 관심 루트 삭제하기 | `DELETE` | `/api/favorites/courses/{courseId}` | 
+| 관심 가게 추가하기 | `POST` | `/api/members/me/favorites/bakeries/{bakeryId}` | 
+| 관심 가게 삭제하기 | `DELETE` | `/api/members/me/favorites/bakeries/{bakeryId}` | 
+| 관심 루트 추가하기 | `POST` | `/api/members/me/favorites/courses/{courseId}` | 
+| 관심 루트 삭제하기 | `DELETE` | `/api/members/me/favorites/courses/{courseId}` | 
 
 ---
 
