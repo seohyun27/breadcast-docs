@@ -991,8 +991,9 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | photo1 | String | private | 빵집 사진        |
 | photo2 | String | private | 빵집 사진        |
 | rating | double | private | 빵집 평균 별점     |
-| favorite_count | int | private | 빵집 좋아요 수     |
-| review_count | int | private | 빵집 리뷰 수      |
+| favoriteCount | int | private | 빵집 좋아요 수     |
+| reviewCount | int | private | 빵집 리뷰 수      |
+| isFavorited | boolean | private | 이 빵집이 사용자가 좋아요한 빵집인지  |
 
 #### 2. Usage
 - 가게 정보 보기
@@ -1009,8 +1010,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | address | String | private | 빵집 주소       |
 | photo1 | String | private | 빵집 사진       |
 | rating | double | private | 빵집 평균 별점    |
-| favorite_count | int | private | 빵집 좋아요 수    |
-| review_count | int | private | 빵집 리뷰 수     |
+| favoriteCount | int | private | 빵집 좋아요 수    |
+| reviewCount | int | private | 빵집 리뷰 수     |
 
 #### 2. Usage
 - 가게 검색 및 정렬하기
@@ -1074,7 +1075,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakeryreport_id | long | private | 제보 글 ID |
+| bakeryreportId | long | private | 제보 글 ID |
 | title | String | private | 제보 글의 제목 |
 | name | String | private | 작성자 이름 |
 | date | LocalDateTime | private | 제보 글 작성 시간 |
@@ -1112,7 +1113,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_id | long | private | 빵집 ID |
+| bakeryId | long | private | 빵집 ID |
 | rating | double | private | 별점 |
 | text | String | private | 리뷰 내용 |
 
@@ -1158,7 +1159,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| reivew_id | long | private | 리뷰 아이디 |
+| reivewId | long | private | 리뷰 아이디 |
 | writer | String | private | 작성자 |
 | rating | double | private | 별점 |
 | text | String | private | 내용 |
@@ -1199,7 +1200,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description            |
 | :--- | :--- |:-----------|:-----------------------|
-| bakery_id | long | private | 해당 코스 파트에 해당하는 빵집의 ID  |
+| bakeryId | long | private | 해당 코스 파트에 해당하는 빵집의 ID  |
 | text | String | private | 파트 내용                  |
 | photo | String | private | 첨부 사진                  |
 | distance | double | private | 이전 코스에서 현재 코스까지의 거리    |
@@ -1233,7 +1234,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_name | long | private | 해당 코스 파트에 해당하는 빵집의 이름 |
+| bakeryName | long | private | 해당 코스 파트에 해당하는 빵집의 이름 |
 | address | String | private | 빵집의 주소 |
 | latitude | double | private | 빵집의 위도 (y좌표) |
 | longitude | double | private | 빵집의 경도 (x좌표) |
@@ -1260,6 +1261,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | parts | `List<CoursePartResponse>` | private | 해당하는 코스 파트들         |
 | reviews | `List<CourseReviewResponse>` | private | 루트에 쓰인 리뷰들          |
 | isMine | boolean | private | 이 루트가 나의 글인지 아닌지    |
+| isFavorited | boolean | private | 이 루트가 내가 좋아요한 루트인지 아닌지   |
+
 
 #### 2. Usage
 - 빵지순례 세부 글 보기
@@ -1271,7 +1274,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| course_id | long | private | 루트 ID |
+| courseId | long | private | 루트 ID |
 | title | String | private | 루트 제목 |
 | description | String | private | 루트 글 간략한 설명 |
 | name | String | private | 작성자 이름 |
@@ -1302,7 +1305,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| reivew_id | long | private | 리뷰 아이디 |
+| reivewId | long | private | 리뷰 아이디 |
 | writer | String | private | 작성자 |
 | text | String | private | 내용 |
 | date | LocalDateTime | private | 작성일자 |
@@ -1359,7 +1362,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| course_id | long | private | 빵지순례 ID     |
+| courseId | long | private | 빵지순례 ID     |
 | title | String | private | 빵지순례 제목     |
 | photo | String | private | 빵지순례 사진     |
 
@@ -1373,9 +1376,9 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_id | long | private | 빵집 ID       |
+| bakeryId | long | private | 빵집 ID       |
 | name | String | private | 빵집 이름       |
-| review_id | long | private | 빵집 리뷰 ID    |
+| reviewId | long | private | 빵집 리뷰 ID    |
 | text | String | private | 빵집 리뷰 내용    |
 | rating | double | private | 빵집 리뷰 별점    |
 | photo | String | private | 빵집 리뷰 사진    |
@@ -1391,11 +1394,11 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_id | long | private | 빵집 ID       |
-| menu_id | long | private | 메뉴 ID       |
-| review_id | long | private | 메뉴 리뷰 ID    |
-| bakery_name | String | private | 빵집 이름       |
-| meun_name | String | private | 메뉴 이름       |
+| bakeryId | long | private | 빵집 ID       |
+| menuId | long | private | 메뉴 ID       |
+| reviewId | long | private | 메뉴 리뷰 ID    |
+| bakeryName | String | private | 빵집 이름       |
+| meunName | String | private | 메뉴 이름       |
 | text | String | private | 메뉴 리뷰 내용    |
 | rating | double | private | 메뉴 리뷰 별점    |
 | date | LocalDateTime | private | 메뉴 리뷰 작성 시간 |
@@ -1410,11 +1413,11 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description               |
 | :--- | :--- |:-----------|:--------------------------|
-| course_id | long | private | 빵지순례(course) ID           |
-| review_id | long | private | 빵지순례 리뷰 ID                |
-| course_nickname | String | private | 빵지순례 작성자 닉네임              |
+| courseId | long | private | 빵지순례(course) ID           |
+| reviewId | long | private | 빵지순례 리뷰 ID                |
+| courseNickname | String | private | 빵지순례 작성자 닉네임              |
 | title | String | private | 빵지순례 제목                   |
-| review_nickname | String | private | 빵지순례 리뷰 작성자 (=사용자 본인) 닉네임 |
+| reviewNickname | String | private | 빵지순례 리뷰 작성자 (=사용자 본인) 닉네임 |
 | text | String | private | 빵지순례 리뷰 내용                |
 | date | LocalDateTime | private | 빵지순례 리뷰 쓴 시간              |
 
