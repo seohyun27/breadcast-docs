@@ -146,7 +146,7 @@
 - 사용자가 삭제 권한이 있는지 검증하고 권한이 없으면 예외를 발생시켜 처리한다.
 - 권한이 있고 리뷰 엔티티도 존재한다면 ReviewService는 bakeryReviewRepository.deleteById()를 호출하여 해당 엔티티를 데이터베이스에서 삭제한다.
 - 삭제 작업이 성공적으로 끝나면 ReviewService는 void를 반환하며 BakeryController에게 성공을 알린다.
-- BakeryController가 최종적으로 ResponseEntity<Void>를 사용자에게 넘겨줌으로써 가게 리뷰 삭제가 완료된다.
+- BakeryController가 최종적으로 ApiResponse<Void>를 사용자에게 넘겨줌으로써 가게 리뷰 삭제가 완료된다.
 
 ## 14) 가게 메뉴 목록 보기
 ![14_MenuListShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/14-Menu-List-Show.jpg?raw=true)
@@ -189,7 +189,7 @@
 - 조건을 다 통과하면, ReviewService는 DTO의 내용을 포함하는 MenuReview 엔티티를 생성한다.
 - 생성된 엔티티는 menuReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
 - 저장이 완료된 후, ReviewService는 저장된 MenuReview 엔티티 정보를 MenuReviewResponse DTO로 변환시키며, 이 DTO를 MenuController에게 전달한다.
-- 이렇게 받은 최종 응답을 MenuController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 메뉴 리뷰 작성이 성공적으로 완료된다.
+- 이렇게 받은 최종 응답을 MenuController가 ApiResponse<T>에 담아 사용자에게 넘겨줌으로써 메뉴 리뷰 작성이 성공적으로 완료된다.
 
 ## 17) 메뉴 리뷰 수정하기
 ![17_MenuReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/17-Menu-Review-Update.jpg?raw=true)
@@ -218,7 +218,7 @@
 - 권한이 없으면 예외를 발생시켜 처리한다.
 - 권한 확인이 끝나면 menuReviewRepository.deleteById()를 호출하여 데이터베이스에서 메뉴 리뷰를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReviewService는 void를 반환하며 MenuController에게 성공을 알린다.
-- 이렇게 전달받은 성공 응답을 MenuController가 ResponseEntity<Void>로 최종적으로 사용자에게 넘겨줌으로써 메뉴 리뷰 삭제가 완료된다.
+- 이렇게 전달받은 성공 응답을 MenuController가 ApiResponse<Void>로 최종적으로 사용자에게 넘겨줌으로써 메뉴 리뷰 삭제가 완료된다.
 
 ## 19) 제보 보기
 ![19_ReportShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/19-Report-Show.jpg?raw=true)
@@ -244,7 +244,7 @@
 - 이 검증이 완료되면, ReportService는 memId, bakeryId, DTO의 내용을 포함하는 BakeryReport 엔티티를 생성한다.
 - 생성된 엔티티는 bakeryReportRepository.save()를 호출하여 데이터베이스에 저장된다.
 - 저장이 완료된 후, ReportService는 저장된 BakeryReport 엔티티 정보를 ReportsResponse DTO로 변환시키며, 이 DTO를 ReportController에게 전달한다.
-- 이렇게 받은 최종 응답을 ReportController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵집 제보 작성이 성공적으로 완료된다.
+- 이렇게 받은 최종 응답을 ReportController가 ApiResponse<T>에 담아 사용자에게 넘겨줌으로써 빵집 제보 작성이 성공적으로 완료된다.
 
 ## 21) 제보 삭제하기
 ![21_ReportDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/21-Report-Delete.jpg?raw=true)
@@ -258,7 +258,7 @@
 - 권한이 없으면 예외를 발생시킨다.
 - 권한 확인이 끝나면 bakeryReportRepository.deleteById()를 호출하여 데이터베이스에서 해당 제보를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReportService는 void를 반환하며 ReportController에게 성공을 알린다.
-- 이렇게 전달받은 성공 응답을 ReportController가 ResponseEntity 상태로 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 삭제가 완료된다.
+- 이렇게 전달받은 성공 응답을 ReportController가 ApiResponse<Void>에 담아 최종적으로 사용자에게 넘겨줌으로써 빵집 제보 삭제가 완료된다.
 
 ## 22) 인기 빵지순례 보기
 ![22_CourseFavoriteShow](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/22-Course-Favorite-Show.jpg?raw=true)
@@ -336,7 +336,7 @@
 - 권한이 존재한다면 ReviewService는 DTO의 내용을 포함하는 CourseReview 엔티티를 생성한다.
 - 생성된 엔티티는 courseReviewRepository.save()를 호출하여 데이터베이스에 저장된다.
 - 저장이 완료된 후, ReviewService는 저장된 CourseReview 엔티티 정보를 CourseReviewResponse DTO로 변환시키며, 이 DTO를 CourseController에게 전달한다.
-- 이렇게 받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵지순례글 리뷰 작성이 성공적으로 완료된다.
+- 이렇게 받은 최종 응답을 CourseController가 ApiResponse<T>에 담아 사용자에게 넘겨줌으로써 빵지순례글 리뷰 작성이 성공적으로 완료된다.
 
 ## 28) 빵지순례 리뷰 수정하기
 ![28_CourseReviewUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/28-Course-Review-Update.jpg?raw=true)
@@ -350,7 +350,7 @@
 - 권한이 일치하지 않으면 수정 권한이 없으므로 예외를 발생시킨다.
 - 검증이 완료되면, courseReviewId를 이용해 데이터베이스 내 영속성 객체를 가져온 뒤 CourseReview.update() 메소드를 호출하여 조회된 리뷰 엔티티에 DTO의 새로운 내용을 반영한다.
 - 수정이 완료된 후, ReviewService는 수정된 CourseReview 엔티티 정보를 CourseReviewResponse DTO로 변환시키며, 이 DTO를 CourseController에게 전달한다.
-- 이렇게 받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 루트 글 리뷰 수정이 완료된다.
+- 이렇게 받은 최종 응답을 CourseController가 ApiResponse<T>에 담아 사용자에게 넘겨줌으로써 루트 글 리뷰 수정이 완료된다.
 
 ## 29) 빵지순례 리뷰 삭제하기
 ![29_CourseReviewDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/29-Course-Review-Delete.jpg?raw=true)
@@ -364,7 +364,7 @@
 - 만약 권한이 없으면 삭제를 진행하지 않고 예외를 발생시킨다.
 - 권한 확인이 완료되면, courseReviewRepository.deleteById()를 호출하여 데이터베이스에서 해당 리뷰를 삭제한다.
 - 삭제 작업이 성공적으로 완료된 후, ReviewService는 void를 반환하며 CourseController에게 성공을 알린다.
-- 이렇게 전달받은 성공 응답을 CourseController가 ResponseEntity를 사용하여 사용자에게 넘겨줌으로써 루트 글 리뷰 삭제가 완료된다.
+- 이렇게 전달받은 성공 응답을 CourseController가 ApiResponse<T>를 사용하여 사용자에게 넘겨줌으로써 루트 글 리뷰 삭제가 완료된다.
 
 ## 30) 빵지순례 만들기
 ![30_CourseAdd](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/30-Course-Add.jpg?raw=true)
@@ -382,7 +382,7 @@
 - 빵집이 존재한다면 CoursePart 엔티티를 생성하고 coursePartRepository.save() 메소드를 이용해 데이터베이스에 저장한다.
 - 저장이 완료되면 만들어진 CoursePart 객체들의 정보를 List<CoursePartResponse>에 담아 CourseService로 반환한다.
 - CourseService는 CoursePartService에서 반환받은 List<CoursePartResponse>와 처음에 만든 Course의 정보를 하나의 CourseResponse DTO로 묶어 CourseController로 반환한다. 
-- 이렇게 전달받은 최종 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 빵지순례 글 작성이 성공적으로 완료된다.
+- 이렇게 전달받은 최종 응답을 CourseController가 ApiResponse<T>에 담아 사용자에게 넘겨줌으로써 빵지순례 글 작성이 성공적으로 완료된다.
 
 ## 31) 빵지순례 수정하기
 ![31_CourseUpdate](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/31-Course-Update.jpg?raw=true)
@@ -400,7 +400,7 @@
 - 삭제 후에는 CoursePartService.createCourseParts()를 호출하여 새로운 CoursePart를 일괄 저장하는 작업을 진행한다.
 - createCourseParts가 반환한 List<CoursePartResponse>를 CourseService에게 그대로 반환한다.
 - CourseService는 CoursePartService가 반환한 List<CoursePartResponse>와 바뀐 Course의 정보를 묶어 CourseResponse DTO로 CourseController에 반환한다.
-- 이렇게 전달받은 응답을 CourseController가 ResponseEntity에 담아 사용자에게 넘겨줌으로써 루트 글 수정이 완료된다.
+- 이렇게 전달받은 응답을 CourseController가 ApiResponse<T>에 담아 사용자에게 넘겨줌으로써 루트 글 수정이 완료된다.
 
 ## 32) 빵지순례 삭제하기
 ![32_CourseDelete](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/32-Course-Delete.jpg?raw=true)
