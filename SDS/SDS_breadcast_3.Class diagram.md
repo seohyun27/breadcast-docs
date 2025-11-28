@@ -237,10 +237,11 @@ Bakery 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 �
 |      | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-|:-----| :--- | :--- | :--- |
-|      | | | (JpaRepository의 기본 CRUD 메소드들을 상속받아 사용) |
-
+| Name                                     | Argument | Returns        | Description                                   |
+|:-----------------------------------------|:---------|:---------------|:----------------------------------------------|
+| findByNameIgnoringSpacesAndSortReview    | String cleanedSearchTerm         | List<Object[]> | 입력 문자열을 포함하는 이름을 가진 빵집을 리뷰수 내림차순으로 빵집 목록을 조회  |
+| findByNameIgnoringSpacesAndSortFavorite    | String cleanedSearchTerm         | List<Object[]> | 입력 문자열을 포함하는 이름을 가진 빵집을 좋아요수 내림차순으로 빵집 목록을 조회 |
+|findAllPopularBakeries |          | List<Object[]> | 좋아요수 내림차순으로 빵집 목록을 조회                         |
 ---
 
 ### BakeryReportRepository
@@ -853,7 +854,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | updateBakeryReview | Long bakeryReviewId, Long memId, BakeryReviewRequest request | BakeryReviewResponse | 특정 빵집 리뷰를 수정 |
 | deleteBakeryReview | Long bakeryRevieweId, Long memId | void | 특정 빵집 리뷰를 삭제 |
 | getBakeryReviews | Long bakeryId, Long memId | `List<BakeryReviewResponse>` | 특정 빵집에 대한 모든 리뷰 목록을 조회 |
-| getMyBakeryReview | Long bakeryId, Long memId | `List<GetMyBakeryReviewResponse>` | 특정 회원이 작성한 빵집 리뷰 목록을 조회 |
+| getMyBakeryReview | Long memId | `List<GetMyBakeryReviewResponse>` | 특정 회원이 작성한 빵집 리뷰 목록을 조회 |
 | addMenuReview | Long menuId, Long memId, AddMenuReviewRequest request | MenuReviewResponse | 특정 메뉴에 대한 리뷰를 생성(저장) |
 | updateMenuReview | Long menuReviewId, Long memId, UpdateMenuReviewRequest request | MenuReviewResponse | 특정 메뉴 리뷰를 수정 |
 | deleteMenuReview | Long reviewId, Long memId | void | 특정 메뉴 리뷰를 삭제 |
