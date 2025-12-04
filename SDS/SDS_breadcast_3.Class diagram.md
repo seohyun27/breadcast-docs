@@ -5,7 +5,7 @@
 ## 3.1. Class diagram
 
 - 이곳에 작성된 클래스 다이어그램은 시스템의 핵심 도메인 모델을 표현하는 것을 목적으로 하였다. 
-- 큰 규모의 어플리케이션을 효과적으로 설명하기 위해 아래 6개의 분야별로 클래스 다이어그램을 나눠 작성하였다.
+- 큰 규모의 어플리케이션을 효과적으로 설명하기 위해 아래 6개의 도메인별로 클래스 다이어그램을 나눠 작성하였다.
   - member 클래스 다이어그램
   - bakery 클래스 다이어그램
   - course 클래스 다이어그램
@@ -19,6 +19,7 @@
   - 따라서 모든 클래스 다이어그램에서 기본 생성자를 생략하고 외부에서 호출이 가능한 생성 메소드만을 표기하였다.
 - 모든 Repository 클래스는 Spring Data JPA의 JpaRepository를 상속받는 인터페이스로 구현되었으며 이는 공통 아키텍처 패턴이므로 다이어그램 상에서 상속 관계를 생략하였다.
 - 각 클래스 다이어그램에 계층간 데이터 전송을 위한 DTO 클래스들은 포함하지 않았다. 
+- 클래스 다이어그램 내에서는 자세하게 표시되지 않았으나 ApiResponse<T> 클래스와 에러 클래스, 에러 핸들러 클래스 등을 구현하여 모든 API 메소드의 반환 형태(서비스 클래스의 에러 처리 포함)를 통일하였다.
 - DTO와 API의 경우 `3.1. Class diagram` 아래 `3.2. DTO`와 `3.3. API` 파트에서 해당 클래스들의 구성을 따로 설명하였다.
 
 
@@ -141,14 +142,14 @@ Spring Security의 UserDetailsService를 구현하여, AuthenticationManager를 
 | courseReviewRepository | CourseReviewRepository | private | 코스 리뷰 데이터에 접근하는 리포지토리 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description               |
-| :--- | :--- | :--- |:--------------------------|
-| deleteMember | UserDetailsImpl userDetails | `ResponseEntity<Void>` | 회원 탈퇴 HTTP 요청을 처리         |
-| updateNickname | UserDetailsImpl userDetails, MemberUpdateRequest request | `ResponseEntity<MemberResponse>` | 닉네임 변경 HTTP 요청을 처리        |
-| getMyBakeryReview | UserDetailsImpl userDetails | `List<GetMyBakeryReviewResponse>` | 인증된 사용자가 작성한 빵집 리뷰 목록을 조회 |
-| getMyMenuReview | UserDetailsImpl userDetails | `List<GetMyMenuReviewResponse>` | 사용자가 작성한 메뉴 리뷰 목록을 조회     |
-| getMyCourse | UserDetailsImpl userDetails | `List<GetMyCourseResponse>` | 사용자가 생성한 코스 목록을 조회        |
-| getMyCourseReview | UserDetailsImpl userDetails | `List<GetMyCourseReviewResponse>` | 사용자가 작성한 코스 리뷰 목록을 조회     |
+| Name | Argument | Returns                                        | Description               |
+| :--- | :--- |:-----------------------------------------------|:--------------------------|
+| deleteMember | UserDetailsImpl userDetails | `ApiResponse<Void>`                            | 회원 탈퇴 HTTP 요청을 처리         |
+| updateNickname | UserDetailsImpl userDetails, MemberUpdateRequest request | `ApiResponse<MemberResponse>`                  | 닉네임 변경 HTTP 요청을 처리        |
+| getMyBakeryReview | UserDetailsImpl userDetails | `ApiResponse<List<GetMyBakeryReviewResponse>>` | 인증된 사용자가 작성한 빵집 리뷰 목록을 조회 |
+| getMyMenuReview | UserDetailsImpl userDetails | `ApiResponse<List<GetMyMenuReviewResponse>>`   | 사용자가 작성한 메뉴 리뷰 목록을 조회     |
+| getMyCourse | UserDetailsImpl userDetails | `ApiResponse<List<GetMyCourseResponse>>`       | 사용자가 생성한 코스 목록을 조회        |
+| getMyCourseReview | UserDetailsImpl userDetails | `ApiResponse<List<GetMyCourseReviewResponse>>` | 사용자가 작성한 코스 리뷰 목록을 조회     |
 
 ---
 
@@ -163,8 +164,8 @@ Spring Security의 UserDetailsService를 구현하여, AuthenticationManager를 
 #### 2. Operations
 | Name | Argument | Returns | Description |
 | :--- | :--- | :--- | :--- |
-| signup | SignupRequest request | `ResponseEntity<MemberResponse>` | 회원 가입 HTTP 요청을 처리 |
-| login | LoginRequest request | `ResponseEntity<MemberResponse>` | 로그인 HTTP 요청을 처리 |
+| signup | SignupRequest request | `ApiResponse<MemberResponse>` | 회원 가입 HTTP 요청을 처리 |
+| login | LoginRequest request | `ApiResponse<MemberResponse>` | 로그인 HTTP 요청을 처리 |
 
 ---
 
@@ -190,6 +191,7 @@ Spring Security의 UserDetailsService를 구현하여, AuthenticationManager를 
 | :--- | :--- | :--- |:-----------------------|
 | id | long | private | 빵집을 구분하기 위한 고유 ID (PK) |
 | name | String | private | 빵집 이름                  |
+| text | String | private | 빵집 소개글                 |
 | address | String | private | 빵집 주소                  |
 | phone | String | private | 빵집 전화번호                |
 | latitude | double | private | 빵집 위치의 위도 (y좌표)        |
@@ -197,11 +199,12 @@ Spring Security의 UserDetailsService를 구현하여, AuthenticationManager를 
 | URL | String | private | 빵집과 관련된 웹사이트 URL       |
 | photo1 | String | private | 빵집 사진1 경로              |
 | photo2 | String | private | 빵집 사진2 경로              |
+| operatingHours | String | private | 빵집 운영 시간               |
 
 #### 2. Operations
-| Name | Argument | Returns | Description                                 |
-| :--- | :--- | :--- |:--------------------------------------------|
-| createBakery | String name, String address, String phone, double latitude, double longitude, String URL, String photo1, String photo2 | Bakery | 모든 정보를 받아 새로운 Bakery 객체를 생성하는 static 생성 메소드 |
+| Name | Argument                                                                                                                                     | Returns | Description                                 |
+| :--- |:---------------------------------------------------------------------------------------------------------------------------------------------| :--- |:--------------------------------------------|
+| createBakery | String name, String address, String text, String phone, double latitude, double longitude, String URL, String photo1, String photo2, String operatingHours | Bakery | 모든 정보를 받아 새로운 Bakery 객체를 생성하는 static 생성 메소드 |
 
 ---
 
@@ -234,10 +237,11 @@ Bakery 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 �
 |      | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-|:-----| :--- | :--- | :--- |
-|      | | | (JpaRepository의 기본 CRUD 메소드들을 상속받아 사용) |
-
+| Name                                     | Argument | Returns        | Description                                   |
+|:-----------------------------------------|:---------|:---------------|:----------------------------------------------|
+| findByNameIgnoringSpacesAndSortReview    | String cleanedSearchTerm         | List<Object[]> | 입력 문자열을 포함하는 이름을 가진 빵집을 리뷰수 내림차순으로 빵집 목록을 조회  |
+| findByNameIgnoringSpacesAndSortFavorite    | String cleanedSearchTerm         | List<Object[]> | 입력 문자열을 포함하는 이름을 가진 빵집을 좋아요수 내림차순으로 빵집 목록을 조회 |
+|findAllPopularBakeries |          | List<Object[]> | 좋아요수 내림차순으로 빵집 목록을 조회                         |
 ---
 
 ### BakeryReportRepository
@@ -249,10 +253,10 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 |  | | | (Interface이므로 상속받은 JpaRepository 외에 별도 정의된 속성 없음) |
 
 #### 2. Operations
-| Name | Argument | Returns              | Description |
-| :--- | :--- |:---------------------| :--- |
-| findByMemberId | Long memId | `List<BakeryReport>` | 특정 회원이 작성한 모든 빵집 제보 목록을 조회 |
-| findByBakeryIdOrderByCreatedAtDesc | Long bakeryId | `List<BakeryReport>` | 특정 빵집의 제보 목록을 최신순으로 조회 |
+| Name | Argument | Returns                          | Description |
+| :--- | :--- |:---------------------------------| :--- |
+| findByMemberId | Long memId | `List<BakeryReport>`             | 특정 회원이 작성한 모든 빵집 제보 목록을 조회 |
+| findByBakeryIdOrderByCreatedAtDesc | Long bakeryId | `List<BakeryReport>`             | 특정 빵집의 제보 목록을 최신순으로 조회 |
 | findByCreatedAtBefore | LocalDateTime createdAt | `List<BakeryReport>` | 특정 시각 이전에 생성된 모든 빵집 제보 목록을 조회 |
 
 ---
@@ -266,10 +270,10 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | bakeryRepository | BakeryRepository | private | 빵집 엔티티의 DB 작업을 위한 리포지토리 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description                  |
-| :--- | :--- | :--- |:-----------------------------|
-| getBakeryDetail | Long bakeryId, Long memId | BakeryDetailResponse | 특정 빵집의 상세 정보를 조회하여 반환        |
-| searchBakeries | SearchBakeryRequest request | `List<SearchBakeryResponse>` | 검색 조건(제목)에 맞는 빵집 목록을 검색하여 반환 |
+| Name | Argument                    | Returns                                  | Description                  |
+| :--- |:----------------------------|:-----------------------------------------|:-----------------------------|
+| getBakeryDetail | Long bakeryId, Long memId   | `BakeryDetailResponse`                   | 특정 빵집의 상세 정보를 조회하여 반환        |
+| searchBakeries | String keyword, String sort | `List<SearchBakeryResponse>`             | 검색 조건(제목)에 맞는 빵집 목록을 검색하여 반환 |
 
 ---
 
@@ -283,12 +287,12 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | bakeryReportRepository | BakeryReportRepository | private | 빵집 제보 엔티티의 DB 작업을 위한 리포지토리 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description                |
-| :--- | :--- | :--- |:---------------------------|
+| Name | Argument | Returns                 | Description                |
+| :--- | :--- |:------------------------|:---------------------------|
 | getReports | Long bakeryId, Long memId | `List<ReportsResponse>` | 특정 빵집의 제보 목록을 조회           |
-| addReport | Long bakeryId, Long memId, AddReportRequest request | ReportsResponse | 새로운 빵집 제보를 DB에 저장          |
-| deleteBakeryReport | Long bakeryReportId, Long memId | void | 사용자가 자신이 작성했던 빵집 제보를 삭제    |
-| cleanupExpiredReports | | void | 게시 기간(일주일)이 만료된 제보들을 일괄 삭제 |
+| addReport | Long bakeryId, Long memId, AddReportRequest request | `ReportsResponse`       | 새로운 빵집 제보를 DB에 저장          |
+| deleteBakeryReport | Long bakeryReportId, Long memId | `void`                     | 사용자가 자신이 작성했던 빵집 제보를 삭제    |
+| cleanupExpiredReports | | `void`                  | 게시 기간(일주일)이 만료된 제보들을 일괄 삭제 |
 
 ---
 
@@ -302,14 +306,14 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | reviewService | ReviewService | private | 리뷰 관련 비즈니스 로직을 처리하는 서비스 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| getBakeryDetail | Long bakeryId, UserDetailsImpl userDetails | BakeryDetailResponse | 특정 빵집의 상세 정보 조회 요청을 처리 |
-| getBakeryReviews | Long bakeryId, UserDetailsImpl userDetails | `List<BakeryReviewResponse>` | 특정 빵집의 리뷰 목록 조회 요청을 처리 |
-| addBakeryReview | Long bakeryId, UserDetailsImpl userDetails, BakeryReviewRequest request | `ResponseEntity<BakeryReviewResponse>` | 특정 빵집에 대한 리뷰 작성 요청을 처리 |
-| updateBakeryReview | Long bakeryReviewId, UserDetailsImpl userDetails, BakeryReviewRequest request | `ResponseEntity<BakeryReviewResponse>` | 특정 빵집 리뷰의 수정 요청을 처리 |
-| bakeryReviewDelete | Long bakeryReviewId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 빵집 리뷰의 삭제 요청을 처리 |
-| searchBakeries | SearchBakeryRequest request | `List<SearchBakeryResponse>` | 빵집 검색 요청을 처리 |
+| Name | Argument | Returns                                   | Description |
+| :--- | :--- |:------------------------------------------| :--- |
+| getBakeryDetail | Long bakeryId, UserDetailsImpl userDetails | `ApiResponse<BakeryDetailResponse>`         | 특정 빵집의 상세 정보 조회 요청을 처리 |
+| getBakeryReviews | Long bakeryId, UserDetailsImpl userDetails | `ApiResponse<List<BakeryReviewResponse>>` | 특정 빵집의 리뷰 목록 조회 요청을 처리 |
+| addBakeryReview | Long bakeryId, UserDetailsImpl userDetails, BakeryReviewRequest request | `ApiResponse<BakeryReviewResponse>`       | 특정 빵집에 대한 리뷰 작성 요청을 처리 |
+| updateBakeryReview | Long bakeryReviewId, UserDetailsImpl userDetails, BakeryReviewRequest request | `ApiResponse<BakeryReviewResponse>`       | 특정 빵집 리뷰의 수정 요청을 처리 |
+| bakeryReviewDelete | Long bakeryReviewId, UserDetailsImpl userDetails | `ApiResponse<Void>`                       | 특정 빵집 리뷰의 삭제 요청을 처리 |
+| searchBakeries | String keyword, String sort | `ApiResponse<List<SearchBakeryResponse>>` | 빵집 검색 요청을 처리 |
 
 ---
 
@@ -322,11 +326,11 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | reportService | ReportService | private | 빵집 제보 관련 비즈니스 로직을 처리하는 서비스 |
 
 #### 2. Operations
-| Name | Argument | Returns                         | Description |
-| :--- | :--- |:--------------------------------| :--- |
-| getReports | Long bakeryId, UserDetailsImpl userDetails | `List<ReportsResponse>`         | 특정 빵집의 제보 목록 조회 요청을 처리 |
-| addReport | Long bakeryId, UserDetailsImpl userDetails, AddReportRequest request | `ResponseEntity<ReportsResponse>` | 특정 빵집에 대한 제보 작성 요청을 처리 |
-| deleteBakeryReport | Long bakeryReportId, UserDetailsImpl userDetails | `ResponseEntity<Void>`            | 특정 빵집 제보의 삭제 요청을 처리 |
+| Name | Argument | Returns                              | Description |
+| :--- | :--- |:-------------------------------------| :--- |
+| getReports | Long bakeryId, UserDetailsImpl userDetails | `ApiResponse<List<ReportsResponse>>` | 특정 빵집의 제보 목록 조회 요청을 처리 |
+| addReport | Long bakeryId, UserDetailsImpl userDetails, AddReportRequest request | `ApiResponse<ReportsResponse>`                  | 특정 빵집에 대한 제보 작성 요청을 처리 |
+| deleteBakeryReport | Long bakeryReportId, UserDetailsImpl userDetails | `ApiResponse<Void>`               | 특정 빵집 제보의 삭제 요청을 처리 |
 
 ---
 
@@ -360,40 +364,6 @@ BakeryReport 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | Name | Argument | Returns | Description                  |
 | :--- | :--- | :--- |:-----------------------------|
 | createMenu | String name, int price, String inform, String photo, Bakery bakery | Menu | 새로운 Menu 객체를 생성하는 static 메소드 |
-
----
-
-### Bread
-빵의 이름과 카테고리 정보를 저장하는 엔티티 클래스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- | :--- | :--- |
-| id | long | private | 빵을 구분하기 위한 고유 ID (PK) |
-| name | String | private | 빵 이름 |
-| category | String | private | 빵 카테고리 |
-
-#### 2. Operations
-| Name | Argument | Returns | Description                   |
-| :--- | :--- | :--- |:------------------------------|
-| createBread | String name, String category | Bread | 새로운 Bread 객체를 생성하는 static 메소드 |
-
----
-
-### Classfy
-Menu 엔티티와 Bread 엔티티를 연결(매핑)하는 엔티티 클래스
-
-#### 1. Attributes
-| Name | Type | Visibility | Description                 |
-| :--- | :--- | :--- |:----------------------------|
-| id | long | private | Classfy를 구분하기 위한 고유 ID (PK) |
-| menu | Menu | private | 연결된 메뉴 (FK)                 |
-| bread | Bread | private | 연결된 빵 (FK)                  |
-
-#### 2. Operations
-| Name | Argument | Returns | Description                                   |
-| :--- | :--- | :--- |:----------------------------------------------|
-| createClassfy | Menu menu, Bread bread | Classfy | Menu와 Bread를 받아 새 Classfy 객체를 생성하는 static 메소드 |
 
 ---
 
@@ -440,13 +410,13 @@ Menu 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토리 인�
 | reviewService | ReviewService | private | 리뷰 관련 비즈니스 로직을 처리하는 서비스 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| getMenus | Long bakeryId | `List<GetMenusResponse>` | 특정 빵집의 메뉴 목록 조회 요청을 처리 |
-| getMenuDetail | Long menuId, UserDetailsImpl userDetails | GetMenuDetailResponse | 특정 메뉴의 상세 정보 조회 요청을 처리 |
-| addMenuReview | Long menuId, UserDetailsImpl userDetails, AddMenuReviewRequest request | `ResponseEntity<MenuReviewResponse>` | 특정 메뉴에 리뷰를 추가하는 요청을 처리 |
-| updateMenuReview | Long menuReviewId, UserDetailsImpl userDetails, UpdateMenuReviewRequest request | `ResponseEntity<MenuReviewResponse>` | 특정 메뉴 리뷰를 수정하는 요청을 처리 |
-| deleteMenuReview | Long menuReviewId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 메뉴 리뷰를 삭제하는 요청을 처리 |
+| Name | Argument | Returns                               | Description |
+| :--- | :--- |:--------------------------------------| :--- |
+| getMenus | Long bakeryId | `ApiResponse<List<GetMenusResponse>>` | 특정 빵집의 메뉴 목록 조회 요청을 처리 |
+| getMenuDetail | Long menuId, UserDetailsImpl userDetails | `ApiResponse<GetMenuDetailResponse>`    | 특정 메뉴의 상세 정보 조회 요청을 처리 |
+| addMenuReview | Long menuId, UserDetailsImpl userDetails, AddMenuReviewRequest request | `ApiResponse<MenuReviewResponse>`           | 특정 메뉴에 리뷰를 추가하는 요청을 처리 |
+| updateMenuReview | Long menuReviewId, UserDetailsImpl userDetails, UpdateMenuReviewRequest request | `ApiResponse<MenuReviewResponse>`  | 특정 메뉴 리뷰를 수정하는 요청을 처리 |
+| deleteMenuReview | Long menuReviewId, UserDetailsImpl userDetails | `ApiResponse<Void>`                | 특정 메뉴 리뷰를 삭제하는 요청을 처리 |
 
 ---
 
@@ -562,7 +532,7 @@ CoursePart 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토�
 | updateCourse | Long courseId, Long memId, CourseRequest request | CourseResponse | 특정 코스의 정보를 수정하고 CoursePartService로 CoursePart 수정을 위임 |
 | deleteCourse | Long courseId, Long memId | void | 특정 코스와 관련된 모든 데이터(코스 파트, 코스 리뷰)를 함께 삭제               |
 | getPopularCourses | | `List<GetSimpleCoursesResponse>` | 좋아요 수를 기준으로 인기 코스 목록을 조회                             |
-| searchCourses | SearchCourseRequest request | `List<GetSimpleCoursesResponse>` | 키워드를 기반으로 코스 목록을 검색                                  |
+| searchCourses | String keyword | `List<GetSimpleCoursesResponse>` | 키워드를 기반으로 코스 목록을 검색                                  |
 | getCourseDetail | Long courseId, Long memId | CourseDetailResponse | 특정 코스의 상세 정보를 조회                                     |
 | getMyCourse | Long memId | `List<Course>` | 특정 회원이 생성한 코스 목록을 조회                                 |
 
@@ -595,17 +565,17 @@ CoursePart의 생성 및 수정 로직을 처리하는 서비스 클래스
 | courseService | CourseService | private | 코스 관련 비즈니스 로직을 처리하는 서비스 |
 
 #### 2. Operations
-| Name | Argument | Returns | Description |
-| :--- | :--- | :--- | :--- |
-| addCourseReview | Long courseId, UserDetailsImpl userDetails, CourseReviewRequest request | `ResponseEntity<CourseReviewResponse>` | 특정 코스에 리뷰를 추가하는 요청을 처리 |
-| updateCourseReview | Long courseReviewId, UserDetailsImpl userDetails, CourseReviewRequest request | `ResponseEntity<CourseReviewResponse>` | 특정 코스 리뷰를 수정하는 요청을 처리 |
-| deleteCourseReview | Long courseReviewId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 코스 리뷰를 삭제하는 요청을 처리 |
-| createCourse | UserDetailsImpl userDetails, CourseRequest request | `ResponseEntity<CourseResponse>` | 새로운 코스를 생성하는 요청을 처리 |
-| updateCourse | Long courseId, UserDetailsImpl userDetails, CourseRequest request | `ResponseEntity<CourseResponse>` | 특정 코스를 수정하는 요청을 처리 |
-| deleteCourse | Long courseId, UserDetailsImpl userDetails | `ResponseEntity<Void>` | 특정 코스를 삭제하는 요청을 처리 |
-| getPopularCourses | | `List<GetSimpleCoursesResponse>` | 인기 코스 목록을 조회하는 요청을 처리 |
-| searchCourses | SearchCourseRequest request | `List<GetSimpleCoursesResponse>` | 코스를 검색하는 요청을 처리 |
-| getCourseDetail | Long courseId, UserDetailsImpl userDetails | CourseDetailResponse | 특정 코스의 상세 정보를 조회하는 요청을 처리 |
+| Name | Argument | Returns                                       | Description |
+| :--- | :--- |:----------------------------------------------| :--- |
+| addCourseReview | Long courseId, UserDetailsImpl userDetails, CourseReviewRequest request | `ApiResponse<CourseReviewResponse>`           | 특정 코스에 리뷰를 추가하는 요청을 처리 |
+| updateCourseReview | Long courseReviewId, UserDetailsImpl userDetails, CourseReviewRequest request | `ApiResponse<CourseReviewResponse>`           | 특정 코스 리뷰를 수정하는 요청을 처리 |
+| deleteCourseReview | Long courseReviewId, UserDetailsImpl userDetails | `ApiResponse<Void>`                           | 특정 코스 리뷰를 삭제하는 요청을 처리 |
+| createCourse | UserDetailsImpl userDetails, CourseRequest request | `ApiResponse<CourseResponse>`                 | 새로운 코스를 생성하는 요청을 처리 |
+| updateCourse | Long courseId, UserDetailsImpl userDetails, CourseRequest request | `ApiResponse<CourseResponse>`                 | 특정 코스를 수정하는 요청을 처리 |
+| deleteCourse | Long courseId, UserDetailsImpl userDetails | `ApiResponse<Void>`                           | 특정 코스를 삭제하는 요청을 처리 |
+| getPopularCourses | | `ApiResponse<List<GetSimpleCoursesResponse>>` | 인기 코스 목록을 조회하는 요청을 처리 |
+| searchCourses | String keyword | `ApiResponse<List<GetSimpleCoursesResponse>>` | 코스를 검색하는 요청을 처리 |
+| getCourseDetail | Long courseId, UserDetailsImpl userDetails | `ApiResponse<CourseDetailResponse>`             | 특정 코스의 상세 정보를 조회하는 요청을 처리 |
 
 ---
 
@@ -723,14 +693,14 @@ FavoriteCourse 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지�
 | favoriteService | FavoriteService | private | Favorite 관련 비즈니스 로직을 처리하는 서비스 |
 
 #### 2. Operations
-| Name | Argument | Returns                           | Description |
-| :--- | :--- |:----------------------------------| :--- |
-| getFavoriteBakeries | UserDetailsImpl userDetails | `List<GetFavoriteBakeriesResponse>` | 즐겨찾기한 빵집 목록 조회 요청을 처리 |
-| addFavoriteBakery | Long bakeryId, UserDetailsImpl userDetails | `ResponseEntity<Void>`              | 빵집 즐겨찾기 추가 요청을 처리 |
-| deleteFavoriteBakery | Long bakeryId, UserDetailsImpl userDetails | `ResponseEntity<Void>`              | 빵집 즐겨찾기 삭제 요청을 처리 |
-| getFavoriteCourses | UserDetailsImpl userDetails | `List<GetFavoriteCoursesResponse>`  | 즐겨찾기한 코스 목록 조회 요청을 처리 |
-| addFavoriteCourse | Long courseId, UserDetailsImpl userDetails | `ResponseEntity<Void>`              | 코스 즐겨찾기 추가 요청을 처리 |
-| deleteFavoriteCourse | Long courseId, UserDetailsImpl userDetails | `ResponseEntity<Void>`              | 코스 즐겨찾기 삭제 요청을 처리 |
+| Name | Argument | Returns                                          | Description |
+| :--- | :--- |:-------------------------------------------------| :--- |
+| getFavoriteBakeries | UserDetailsImpl userDetails | `ApiResponse<List<GetFavoriteBakeriesResponse>>` | 즐겨찾기한 빵집 목록 조회 요청을 처리 |
+| addFavoriteBakery | Long bakeryId, UserDetailsImpl userDetails | `ApiResponse<Void>`                              | 빵집 즐겨찾기 추가 요청을 처리 |
+| deleteFavoriteBakery | Long bakeryId, UserDetailsImpl userDetails | `ApiResponse<Void>`                              | 빵집 즐겨찾기 삭제 요청을 처리 |
+| getFavoriteCourses | UserDetailsImpl userDetails | `ApiResponse<List<GetFavoriteCoursesResponse>>`  | 즐겨찾기한 코스 목록 조회 요청을 처리 |
+| addFavoriteCourse | Long courseId, UserDetailsImpl userDetails | `ApiResponse<Void>`                           | 코스 즐겨찾기 추가 요청을 처리 |
+| deleteFavoriteCourse | Long courseId, UserDetailsImpl userDetails | `ApiResponse<Void>`                           | 코스 즐겨찾기 삭제 요청을 처리 |
 
 ---
 
@@ -884,7 +854,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | updateBakeryReview | Long bakeryReviewId, Long memId, BakeryReviewRequest request | BakeryReviewResponse | 특정 빵집 리뷰를 수정 |
 | deleteBakeryReview | Long bakeryRevieweId, Long memId | void | 특정 빵집 리뷰를 삭제 |
 | getBakeryReviews | Long bakeryId, Long memId | `List<BakeryReviewResponse>` | 특정 빵집에 대한 모든 리뷰 목록을 조회 |
-| getMyBakeryReview | Long bakeryId, Long memId | `List<GetMyBakeryReviewResponse>` | 특정 회원이 작성한 빵집 리뷰 목록을 조회 |
+| getMyBakeryReview | Long memId | `List<GetMyBakeryReviewResponse>` | 특정 회원이 작성한 빵집 리뷰 목록을 조회 |
 | addMenuReview | Long menuId, Long memId, AddMenuReviewRequest request | MenuReviewResponse | 특정 메뉴에 대한 리뷰를 생성(저장) |
 | updateMenuReview | Long menuReviewId, Long memId, UpdateMenuReviewRequest request | MenuReviewResponse | 특정 메뉴 리뷰를 수정 |
 | deleteMenuReview | Long reviewId, Long memId | void | 특정 메뉴 리뷰를 삭제 |
@@ -979,35 +949,26 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 ### BakeryDetailResponse
 
 #### 1. Attributes
-| Name | Type | Visibility | Description  |
-| :--- | :--- |:-----------|:-------------|
-| id | long | private | 빵집 ID        |
-| name | String | private | 빵집 이름        |
-| address | String | private | 빵집 주소        |
-| phone | String | private | 빵집 연락처       |
-| latitude | double | private | 빵집의 위도 (y좌표) |
-| longitude | double | private | 빵집의 경도 (x좌표) |
-| URL | String | private | 빵집 사이트       |
-| photo1 | String | private | 빵집 사진        |
-| photo2 | String | private | 빵집 사진        |
-| rating | double | private | 빵집 평균 별점     |
-| favorite_count | int | private | 빵집 좋아요 수     |
-| review_count | int | private | 빵집 리뷰 수      |
+| Name          | Type    | Visibility | Description          |
+|:--------------|:--------|:-----------|:---------------------|
+| id            | long    | private | 빵집 ID                |
+| name          | String  | private | 빵집 이름                |
+| inform          | String  | private | 빵집 소개글               |
+| address       | String  | private | 빵집 주소                |
+| phone         | String  | private | 빵집 연락처               |
+| latitude      | double  | private | 빵집의 위도 (y좌표)         |
+| longitude     | double  | private | 빵집의 경도 (x좌표)         |
+| URL           | String  | private | 빵집 사이트               |
+| photo1        | String  | private | 빵집 사진                |
+| photo2        | String  | private | 빵집 사진                |
+| rating        | double  | private | 빵집 평균 별점             |
+| favoriteCount | int     | private | 빵집 좋아요 수             |
+| reviewCount   | int     | private | 빵집 리뷰 수              |
+| operatingHours   | String  | private | 빵집 운영 시간             |
+| isFavorited   | boolean | private | 이 빵집이 사용자가 좋아요한 빵집인지 |
 
 #### 2. Usage
 - 가게 정보 보기
-
----
-
-### SearchBakeryRequest
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- |:-----------|:------------|
-| text | String | private | 검색어 |
-
-#### 2. Usage
-- 가게 검색 및 정렬하기
 
 ---
 
@@ -1021,8 +982,8 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | address | String | private | 빵집 주소       |
 | photo1 | String | private | 빵집 사진       |
 | rating | double | private | 빵집 평균 별점    |
-| favorite_count | int | private | 빵집 좋아요 수    |
-| review_count | int | private | 빵집 리뷰 수     |
+| favoriteCount | int | private | 빵집 좋아요 수    |
+| reviewCount | int | private | 빵집 리뷰 수     |
 
 #### 2. Usage
 - 가게 검색 및 정렬하기
@@ -1086,7 +1047,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakeryreport_id | long | private | 제보 글 ID |
+| bakeryreportId | long | private | 제보 글 ID |
 | title | String | private | 제보 글의 제목 |
 | name | String | private | 작성자 이름 |
 | date | LocalDateTime | private | 제보 글 작성 시간 |
@@ -1124,7 +1085,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_id | long | private | 빵집 ID |
+| bakeryId | long | private | 빵집 ID |
 | rating | double | private | 별점 |
 | text | String | private | 리뷰 내용 |
 
@@ -1170,7 +1131,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| reivew_id | long | private | 리뷰 아이디 |
+| reivewId | long | private | 리뷰 아이디 |
 | writer | String | private | 작성자 |
 | rating | double | private | 별점 |
 | text | String | private | 내용 |
@@ -1211,7 +1172,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description            |
 | :--- | :--- |:-----------|:-----------------------|
-| bakery_id | long | private | 해당 코스 파트에 해당하는 빵집의 ID  |
+| bakeryId | long | private | 해당 코스 파트에 해당하는 빵집의 ID  |
 | text | String | private | 파트 내용                  |
 | photo | String | private | 첨부 사진                  |
 | distance | double | private | 이전 코스에서 현재 코스까지의 거리    |
@@ -1245,7 +1206,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_name | long | private | 해당 코스 파트에 해당하는 빵집의 이름 |
+| bakeryName | long | private | 해당 코스 파트에 해당하는 빵집의 이름 |
 | address | String | private | 빵집의 주소 |
 | latitude | double | private | 빵집의 위도 (y좌표) |
 | longitude | double | private | 빵집의 경도 (x좌표) |
@@ -1272,21 +1233,11 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | parts | `List<CoursePartResponse>` | private | 해당하는 코스 파트들         |
 | reviews | `List<CourseReviewResponse>` | private | 루트에 쓰인 리뷰들          |
 | isMine | boolean | private | 이 루트가 나의 글인지 아닌지    |
+| isFavorited | boolean | private | 이 루트가 내가 좋아요한 루트인지 아닌지   |
+
 
 #### 2. Usage
 - 빵지순례 세부 글 보기
-
----
-
-### SearchCourseRequest
-
-#### 1. Attributes
-| Name | Type | Visibility | Description |
-| :--- | :--- |:-----------|:------------|
-| title | String | private | 찾으려는 검색어 |
-
-#### 2. Usage
-- 빵지순례 검색하기
 
 ---
 
@@ -1295,7 +1246,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| course_id | long | private | 루트 ID |
+| courseId | long | private | 루트 ID |
 | title | String | private | 루트 제목 |
 | description | String | private | 루트 글 간략한 설명 |
 | name | String | private | 작성자 이름 |
@@ -1326,7 +1277,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| reivew_id | long | private | 리뷰 아이디 |
+| reivewId | long | private | 리뷰 아이디 |
 | writer | String | private | 작성자 |
 | text | String | private | 내용 |
 | date | LocalDateTime | private | 작성일자 |
@@ -1383,7 +1334,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| course_id | long | private | 빵지순례 ID     |
+| courseId | long | private | 빵지순례 ID     |
 | title | String | private | 빵지순례 제목     |
 | photo | String | private | 빵지순례 사진     |
 
@@ -1397,9 +1348,9 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_id | long | private | 빵집 ID       |
+| bakeryId | long | private | 빵집 ID       |
 | name | String | private | 빵집 이름       |
-| review_id | long | private | 빵집 리뷰 ID    |
+| reviewId | long | private | 빵집 리뷰 ID    |
 | text | String | private | 빵집 리뷰 내용    |
 | rating | double | private | 빵집 리뷰 별점    |
 | photo | String | private | 빵집 리뷰 사진    |
@@ -1415,11 +1366,11 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description |
 | :--- | :--- |:-----------|:------------|
-| bakery_id | long | private | 빵집 ID       |
-| menu_id | long | private | 메뉴 ID       |
-| review_id | long | private | 메뉴 리뷰 ID    |
-| bakery_name | String | private | 빵집 이름       |
-| meun_name | String | private | 메뉴 이름       |
+| bakeryId | long | private | 빵집 ID       |
+| menuId | long | private | 메뉴 ID       |
+| reviewId | long | private | 메뉴 리뷰 ID    |
+| bakeryName | String | private | 빵집 이름       |
+| meunName | String | private | 메뉴 이름       |
 | text | String | private | 메뉴 리뷰 내용    |
 | rating | double | private | 메뉴 리뷰 별점    |
 | date | LocalDateTime | private | 메뉴 리뷰 작성 시간 |
@@ -1434,11 +1385,11 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 #### 1. Attributes
 | Name | Type | Visibility | Description               |
 | :--- | :--- |:-----------|:--------------------------|
-| course_id | long | private | 빵지순례(course) ID           |
-| review_id | long | private | 빵지순례 리뷰 ID                |
-| course_nickname | String | private | 빵지순례 작성자 닉네임              |
+| courseId | long | private | 빵지순례(course) ID           |
+| reviewId | long | private | 빵지순례 리뷰 ID                |
+| courseNickname | String | private | 빵지순례 작성자 닉네임              |
 | title | String | private | 빵지순례 제목                   |
-| review_nickname | String | private | 빵지순례 리뷰 작성자 (=사용자 본인) 닉네임 |
+| reviewNickname | String | private | 빵지순례 리뷰 작성자 (=사용자 본인) 닉네임 |
 | text | String | private | 빵지순례 리뷰 내용                |
 | date | LocalDateTime | private | 빵지순례 리뷰 쓴 시간              |
 
@@ -1460,8 +1411,10 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 ### 1. AuthController
 
-인증 API <br>
-로그인과 로그아웃 시 서버의 상태를 변경하여야 하므로 POST 메소드를 사용한다. 또한 로그인 시 사용자의 아이디와 비밀번호를를 body에 담아 보내야 하므로 POST 메소드를 사용한다.
+인증 API
+
+- 로그인과 로그아웃 시 서버의 상태를 변경하여야 하므로 POST 메소드를 사용
+- 로그인 시 사용자의 아이디와 비밀번호를를 body에 담아 보내야 하므로 POST 메소드를 사용
 
 | 기능 | HTTP Method | API 경로         |
 | :--- | :--- |:---------------|
@@ -1475,16 +1428,15 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 사용자 정보 및 마이페이지 API
 
-| 기능                | HTTP Method | API 경로                                    |
-|:------------------| :--- |:------------------------------------------|
-| 내 프로필 조회          | `GET` | `/api/members/me`                         |
-| 프로필 수정            | `PATCH` | `/api/members/me`                         |
-| 회원 탈퇴하기           | `DELETE` | `/api/members/me`                         |
-| 내가 작성한 루트 보기      | `GET` | `/api/members/me/courses`                 |
-| 내가 작성한 빵집 리뷰 보기   | `GET` | `/api/members/me/reviews?category=BAKERY` |
-| 내가 작성한 메뉴 리뷰 보기   | `GET` | `/api/members/me/reviews?category=MENU`   |
-| 내가 작성한 빵지순례 리뷰 보기 | `GET` | `/api/members/me/reviews?category=COURSE` |
-| 관심 목록 보기          | `GET` | `/api/members/me/favorites`               |
+| 기능                | HTTP Method | API 경로                           |
+|:------------------| :--- |:---------------------------------|
+| 프로필 수정하기            | `PATCH` | `/api/members/me`                |
+| 회원 탈퇴하기           | `DELETE` | `/api/members/me`                |
+| 내가 작성한 루트 보기      | `GET` | `/api/members/me/courses`        |
+| 내가 작성한 빵집 리뷰 보기   | `GET` | `/api/members/me/bakery-reviews` |
+| 내가 작성한 메뉴 리뷰 보기   | `GET` | `/api/members/me/menu-reviews`   |
+| 내가 작성한 빵지순례 리뷰 보기 | `GET` | `/api/members/me/course-reviews` |
+
 
 ---
 
@@ -1492,13 +1444,14 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 빵집 및 빵집 리뷰 API
 
-| 기능         | HTTP Method | API 경로 | 추가 정보                                        |
-|:-----------| :--- | :--- |:---------------------------------------------|
-| 가게 검색/정렬하기 | `GET` | `/api/bakeries` | `?name=` 또는 `?sort=` 같은 쿼리 스트링으로 검색 및 정렬을 지원 |
-| 가게 정보 보기   | `GET` | `/api/bakeries/{bakeryId}` |                                         |
-| 가게 리뷰 쓰기   | `POST` | `/api/bakeries/{bakeryId}/reviews` |                      |
-| 가게 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` |                           |
-| 가게 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reviews/{reviewId}` |                           |
+| 기능               | HTTP Method | API 경로 | 추가 정보                              |
+|:-----------------| :--- | :--- |:-----------------------------------|
+| 가게 검색하기, 가게 정렬하기 | `GET` | `/api/bakeries` | `?keyword=`와 `?sort=`로 검색 및 정렬을 지원. sort=popular일 때 인기순 정렬, sort=review일 때 리뷰순 정렬 |
+| 가게 정보 보기         | `GET` | `/api/bakeries/{bakeryId}` |                                    |
+| 가게 리뷰 보기         | `GET` | `/api/bakeries/{bakeryId}/bakery-reviews` |                                    |
+| 가게 리뷰 쓰기         | `POST` | `/api/bakeries/{bakeryId}/bakery-reviews` |                                    |
+| 가게 리뷰 수정하기       | `PATCH` | `/api/bakery-reviews/{reviewId}` | 리뷰 ID는 가게 ID와 무관하게 독립적으로 존재        |
+| 가게 리뷰 삭제하기       | `DELETE` | `/api/bakery-reviews/{reviewId}` |                                    |
 
 ---
 
@@ -1506,13 +1459,13 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 메뉴 및 메뉴 리뷰 API
 
-| 기능 | HTTP Method | API 경로 | 
-| :--- | :--- | :--- | 
-| 가게 메뉴 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/menus` |
-| 메뉴 세부 정보 보기 | `GET` | `/api/bakeries/{bakeryId}/menus/{menuId}` | 
-| 메뉴 리뷰 쓰기 | `POST` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews` | 
-| 메뉴 리뷰 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}` | 
-| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/menus/{menuId}/reviews/{reviewId}` | 
+| 기능 | HTTP Method | API 경로                             | 
+| :--- | :--- |:-----------------------------------| 
+| 가게 메뉴 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/menus`   |
+| 메뉴 세부 정보 보기 | `GET` | `/api/menus/{menuId}`              | 
+| 메뉴 리뷰 쓰기 | `POST` | `/api/menus/{menuId}/menu-reviews` | 
+| 메뉴 리뷰 수정하기 | `PATCH` | `/api/menu-reviews/{menuReviewId}`     | 
+| 메뉴 리뷰 삭제하기 | `DELETE` | `/api/menu-reviews/{menuReviewId}`     | 
 
 ---
 
@@ -1524,8 +1477,7 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 | :--- | :--- |:--------------------------|
 | 제보 목록 보기 | `GET` | `/api/bakeries/{bakeryId}/reports` |
 | 제보하기 | `POST` | `/api/bakeries/{bakeryId}/reports`            |
-| 제보 수정하기 | `PATCH` | `/api/bakeries/{bakeryId}/reports/{reportId}` |
-| 제보 삭제하기 | `DELETE` | `/api/bakeries/{bakeryId}/reports/{reportId}` |
+| 제보 삭제하기 | `DELETE` | `/api/reports/{bakeryReportId}` |
 
 ---
 
@@ -1533,16 +1485,17 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 빵지순례글 및 빵지순례 리뷰 API
 
-| 기능 | HTTP Method | API 경로 | 추가 정보                                          |
-| :--- | :--- | :--- |:-----------------------------------------------|
-| 루트 검색/목록 보기 | `GET` | `/api/courses` | `?keyword=` 또는 `?sort=popular` 등으로 검색 및 정렬을 지원 |
-| 루트 세부 글 보기 | `GET` | `/api/courses/{courseId}` |                                                |
-| 루트 작성하기 | `POST` | `/api/courses` |                                                |
-| 루트 수정하기 | `PATCH` | `/api/courses/{courseId}` |                                                |
-| 루트 삭제하기 | `DELETE` | `/api/courses/{courseId}` |                                                |
-| 루트 리뷰 쓰기 | `POST` | `/api/courses/{courseId}/reviews` |                                                |
-| 루트 리뷰 수정하기 | `PATCH` | `/api/courses/{courseId}/reviews/{reviewId}` |                                                |
-| 루트 리뷰 삭제하기 | `DELETE` | `/api/courses/{courseId}/reviews/{reviewId}` |                                                |
+| 기능 | HTTP Method | API 경로 | 추가 정보                                    |
+| :--- | :--- | :--- |:-----------------------------------------|
+| 루트 목록 보기 | `GET` | `/api/courses/popular` |                |
+| 루트 검색하기 | `GET` | `/api/courses` | `?keyword=`로 검색을 지원                      |
+| 루트 세부 글 보기 | `GET` | `/api/courses/{courseId}` |                                          |
+| 루트 작성하기 | `POST` | `/api/courses` |                                          |
+| 루트 수정하기 | `PATCH` | `/api/courses/{courseId}` |                                          |
+| 루트 삭제하기 | `DELETE` | `/api/courses/{courseId}` |                                          |
+| 루트 리뷰 쓰기 | `POST` | `/api/courses/{courseId}/course-reviews` |                                          |
+| 루트 리뷰 수정하기 | `PATCH` | `/api/course-reviews/{courseReviewId}` |                                          |
+| 루트 리뷰 삭제하기 | `DELETE` | `/api/course-reviews/{courseReviewId}` |                                          |
 
 ---
 
@@ -1552,10 +1505,12 @@ CourseReview 엔티티의 DB 접근을 담당하는 Spring Data JPA 리포지토
 
 | 기능 | HTTP Method | API 경로 |
 | :--- | :--- | :--- |
-| 관심 가게 추가하기 | `POST` | `/api/favorites/bakeries/{bakeryId}` | 
-| 관심 가게 삭제하기 | `DELETE` | `/api/favorites/bakeries/{bakeryId}` | 
-| 관심 루트 추가하기 | `POST` | `/api/favorites/courses/{courseId}` | 
-| 관심 루트 삭제하기 | `DELETE` | `/api/favorites/courses/{courseId}` | 
+| 관심 가게 목록 보기       | `GET` | `/api/members/me/favorites/bakeries`      | 
+| 관심 가게 추가하기 | `POST` | `/api/members/me/favorites/bakeries/{bakeryId}` | 
+| 관심 가게 삭제하기 | `DELETE` | `/api/members/me/favorites/bakeries/{bakeryId}` | 
+| 관심 루트 목록 보기       | `GET` | `/api/members/me/favorites/courses`      | 
+| 관심 루트 추가하기 | `POST` | `/api/members/me/favorites/courses/{courseId}` | 
+| 관심 루트 삭제하기 | `DELETE` | `/api/members/me/favorites/courses/{courseId}` | 
 
 ---
 
