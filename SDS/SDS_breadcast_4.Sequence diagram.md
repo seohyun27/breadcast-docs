@@ -494,3 +494,11 @@
 - CourseService가 조회된 Course 엔티티 리스트를 GetMyCoursesResponse DTO 리스트로 변환시킨다.
 - CourseService가 완성된 DTO 리스트를 MemberController에게 전달한다.
 - MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 내가 쓴 빵지순례 보기가 완료된다.
+
+## e1) 사용자 정보 접근
+![e1_UserDataGet](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/e1_UserDataGet.jpg?raw=true)
+
+- 로그인한 사용자의 정보를 이용할 때 반복되는 시스템 시퀀스가 발생한다.
+- 이를 별도 시퀀스 다이어그램으로 만들어 다른 메소드의 시퀀스 다이어그램에서 참조하였다.
+- Controller 계층에서 Spring Security를 통해 ContextSecurityHolder로 사용자 인증을 요청한다.
+- 반환받은 사용자 인증 정보를 통해 CustomUserDetails 객체로 사용자 정보를 변환하여 사용한다.
