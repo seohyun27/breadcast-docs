@@ -15046,7 +15046,7 @@
 													"top": 47,
 													"width": 106.10986328125,
 													"height": 13,
-													"text": "Service"
+													"text": "Controller"
 												},
 												{
 													"_type": "LabelView",
@@ -15920,7 +15920,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGaTt3hM2+uR7I="
 							},
-							"name": "Service",
+							"name": "Controller",
 							"isMultiInstance": false
 						},
 						{
