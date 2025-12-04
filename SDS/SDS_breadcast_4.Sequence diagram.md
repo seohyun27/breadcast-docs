@@ -496,7 +496,7 @@
 - MemberController가 사용자에게 DTO를 포함한 최종 응답을 넘겨줌으로써 내가 쓴 빵지순례 보기가 완료된다.
 
 ## e1) 사용자 정보 접근
-![e1_UserDataGet](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/e1_UserDataGet.jpg?raw=true)
+![e1_UserDataGet](https://github.com/seohyun27/breadcast-docs/blob/main/SDS/images/sequence/e1-UserDataGet.jpg?raw=true)
 
 - 로그인한 사용자의 정보를 이용할 때 반복되는 시스템 시퀀스가 발생한다.
 - 이를 별도 시퀀스 다이어그램으로 만들어 다른 메소드의 시퀀스 다이어그램에서 참조하였다.
